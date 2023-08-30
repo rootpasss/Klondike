@@ -25,4 +25,4 @@ hs_err_pid*
 
 # Ant distribution directory
 build/classes/io
-build/classes/*.jar
+build/*.jar
