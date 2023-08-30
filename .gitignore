@@ -18,9 +18,6 @@
 *.tar.gz
 *.rar
 
-# Manifest file
-*.MF
-
 # Junit tests report
 TEST*.xml
 
