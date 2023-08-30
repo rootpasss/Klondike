@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="klondike" basedir="." default="main">
+  <property name="src.dir"     value="src/main"/>
+  <property name="test.dir"    value="src/test"/>
+  <property name="lib.dir"     value="lib"/>
+  <property name="build.dir"   value="build"/>
+  <property name="classes.dir" value="build/classes"/>
+  <property name="jar.dir"     value="build"/>
+ 
+  <mkdir dir="${src.dir}"/>
+  <mkdir dir="${test.dir}"/>
+  <path id="classpath">
+    <fileset dir="${lib.dir}" includes="**/*.jar"/>
+  </path>
+  
+  <path id="application" location="${classes.dir}"/>
+  
+  <target name="clean">
+    <delete dir="${build.src}"/>
+  </target>
+
+  <target name="compile">
+    <mkdir dir="${classes.dir}"/>
+    <javac srcdir="${src.dir}" destdir="${classes.dir}" classpathref="classpath" includeantruntime="false" />
+  </target>
+
+  <target name="jar" depends="tests">
+    <mkdir dir="${jar.dir}"/>
+    <manifest file="MANIFEST.MF">
+      <attribute name="Main-Class" value="io.bitlab.api.launch.Solitaire"/>
+    </manifest>
+    <jar destfile="${jar.dir}/klondike.jar" basedir="${classes.dir}" manifest="MANIFEST.MF" />
+  </target>
+
+  <target name="compile-tests" depends="compile">
+    <!--<mkdir dir="${test.dir}/reports"/>-->
+    <javac fork="true" srcdir="${test.dir}" destdir="${classes.dir}" classpathref="classpath" includeantruntime="false">
+      <classpath>
+        <pathelement location="${lib.dir}/junit-4.7.jar"/>
+        <path refid="application"/>
+      </classpath>
+    </javac>
+  </target>
+    
+  <target name="tests" depends="compile">
+    <junit printsummary="yes" haltonfailure="yes">
+      <classpath>
+        <pathelement location="${lib.dir}/junit-4.7.jar"/>
+        <pathelement location="${lib.dir}/hamcrest-core-1.3.jar"/>
+        <path location="${classes.dir}"/>
+      </classpath>
+      <formatter type="xml"/>
+      <!--<batchtest fork="yes" todir="${test.dir}/reports">-->
+      <batchtest>
+        <fileset dir="${test.dir}">
+          <include name="**/*Test.java"/>
+        </fileset>
+      </batchtest>
+    </junit>
+  </target>
+ 
+  <target name="clean-build" depends="clean,jar"/>
+  <target name="main" depends="compile,compile-tests,jar"/>
+</project>
