@@ -24,4 +24,5 @@ TEST*.xml
 hs_err_pid*
 
 # Ant distribution directory
-build/
+build/classes/io
+build/classes/*.jar
