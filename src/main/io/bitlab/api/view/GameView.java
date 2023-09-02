@@ -64,8 +64,15 @@ public class GameView extends JFrame {
     createArea();
     addButtons();
     setVisible(true);
+    printHeader();
     System.out.printf("%c %c %c %c  Welcome to Solitaire! %c %c %c %c%n",
     '\u2667','\u2662','\u2661','\u2664','\u2664','\u2661','\u2662','\u2667');
+  }
+
+  private void printHeader() {
+    System.out.println("Solitaire-Klondike: a Java classic version");
+    System.out.println("(c)2023 JNY");
+    System.out.println("github.com/rootpasss\n");
   }
 
   private void addButtons() {
