@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="klondike" basedir="." default="main">
   <property name="src.dir"     value="src/main"/>
-  <property name="lib.dir"     value="lib"/>
   <property name="build.dir"   value="build"/>
   <property name="classes.dir" value="build/classes"/>
   <property name="jar.dir"     value="build"/>
  
   <mkdir dir="${src.dir}"/>
   <path id="classpath">
-    <fileset dir="${lib.dir}" includes="**/*.jar"/>
   </path>
   
   <path id="application" location="${classes.dir}"/>
