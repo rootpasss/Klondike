@@ -87,7 +87,7 @@ public class GameEngine {
   }
 
   //performs the placement of the elements between stacks
-  public void moveCard(int from,int count,int to) {
+  public boolean moveCard(int from,int count,int to) {
     //int from=3;move from stack 3
     //int count=1;# of cards to move from stack 3
     //int to=2;move to stack 2
@@ -116,8 +116,9 @@ public class GameEngine {
         /*if(flipCount==0&&stackArray[0].size()<3&&stack0.empty()) {
           toFoundation();
         }*/
-      } else {audioAlert();System.out.print(" (NOT VALID)");}
-    } else {audioAlert();}
+      } else {/*audioAlert();System.out.print(" (NOT VALID)");*/return false;}
+    } else {audioAlert();return false;}
+    return true;
   }
 
   //Steps back one movement
