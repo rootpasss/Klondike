@@ -36,9 +36,7 @@ public class GameController {
         from=from+1>12?12:from;
         java.util.List<Rectangle2D.Double>cards=gv.getItems(from);
         if(evt.getClickCount()==2) {
-          //TODO: Bug when click sometimes on stock pile (click ignored or UI not updated)
           if(from>0&&from<8) {
-            //doubleClickMove(from);
             ge.moveCardDoubleClick(from);
             showGameState();
           }
@@ -104,11 +102,6 @@ public class GameController {
       gv.updateUI(ge.getStacks());
       da.setVisible(false);
     } catch(Exception e) {e.printStackTrace();}
-  }
-
-  //temporal block
-  private void doubleClickMove(int index) {
-    ge.moveCardDoubleClick(index);
   }
 
   private void showGameState() {
