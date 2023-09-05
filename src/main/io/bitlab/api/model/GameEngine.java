@@ -149,6 +149,7 @@ public class GameEngine {
     }
   }
 
+  //Move a valid card to foundations when a double click event is triggered
   public void moveCardDoubleClick(int from) {
     boolean passed=false;
     if(stackArray[from].size()>0) {
