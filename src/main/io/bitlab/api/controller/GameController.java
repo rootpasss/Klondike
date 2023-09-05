@@ -35,31 +35,40 @@ public class GameController {
         int from=Integer.parseInt(comp.getName());
         from=from+1>12?12:from;
         java.util.List<Rectangle2D.Double>cards=gv.getItems(from);
-        if(!GameView.pick) {
-          if(from==12) {
-            ge.spinStock();
-            gv.updateUI(ge.getStacks());
-            gv.enableUndoButton(ge.isEmptyStack());
-            GameView.pick=false;
-          } else if(from>0&&from<8) {
-            for(Rectangle2D.Double r:cards) {
-              if(r.contains(evt.getX(),evt.getY())) {
-                GameView.total=cards.size()-cards.indexOf(r);
-                GameView.from=from;
-                GameView.pick=true;
-              }
-            }
-          } else if(cards.size()>0) {
-            GameView.total=1;
-            GameView.from=from;
-            GameView.pick=true;
+        if(evt.getClickCount()==2) {
+          //TODO: Bug when click sometimes on stock pile (click ignored or UI not updated)
+          if(from>0&&from<8) {
+            doubleClickMove(from);
+            showGameState();
           }
-        } else {
-          System.out.print("\nMove "+GameView.total+" cards from pile "+GameView.from+" to pile "+from);
-          GameView.to=from;
           GameView.pick=false;
-          ge.moveCard(GameView.from,GameView.total,from);
-          showGameState();
+        } else {
+          if(!GameView.pick) {
+            if(from==12) {
+              ge.spinStock();
+              gv.updateUI(ge.getStacks());
+              gv.enableUndoButton(ge.isEmptyStack());
+              GameView.pick=false;
+            } else if(from>0&&from<8) {
+              for(Rectangle2D.Double r:cards) {
+                if(r.contains(evt.getX(),evt.getY())) {
+                  GameView.total=cards.size()-cards.indexOf(r);
+                  GameView.from=from;
+                  GameView.pick=true;
+                }
+              }
+            } else if(cards.size()>0) {
+              GameView.total=1;
+              GameView.from=from;
+              GameView.pick=true;
+            }
+          } else {
+            System.out.print("\nMove "+GameView.total+" cards from pile "+GameView.from+" to pile "+from);
+            GameView.to=from;
+            GameView.pick=false;
+            ge.moveCard(GameView.from,GameView.total,from);
+            showGameState();
+          }
         }
       }
     });
@@ -94,6 +103,13 @@ public class GameController {
       gv.updateUI(ge.getStacks());
       da.setVisible(false);
     } catch(Exception e) {e.printStackTrace();}
+  }
+
+  private void doubleClickMove(int index) {
+    int to=8;
+    while(!ge.moveCard(index,1,to)) {
+      to++;
+    }
   }
 
   private void showGameState() {
