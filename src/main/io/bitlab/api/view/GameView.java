@@ -47,9 +47,11 @@ public class GameView extends JFrame {
 
   public GameView() {
     super("Solitaire");
-    setSize(695,540);
+    java.awt.Dimension d=java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+    int width=695; int height=540;
+    int x=d.width/2-width/2;
+    setBounds(x,10,width,height);
     setResizable(false);
-    setLocationRelativeTo(null);
     setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     contentPane=new JPanel(null) {
       @Override
