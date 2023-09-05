@@ -38,7 +38,8 @@ public class GameController {
         if(evt.getClickCount()==2) {
           //TODO: Bug when click sometimes on stock pile (click ignored or UI not updated)
           if(from>0&&from<8) {
-            doubleClickMove(from);
+            //doubleClickMove(from);
+            ge.moveCardDoubleClick(from);
             showGameState();
           }
           GameView.pick=false;
@@ -105,11 +106,9 @@ public class GameController {
     } catch(Exception e) {e.printStackTrace();}
   }
 
+  //temporal block
   private void doubleClickMove(int index) {
-    int to=8;
-    while(!ge.moveCard(index,1,to)) {
-      to++;
-    }
+    ge.moveCardDoubleClick(index);
   }
 
   private void showGameState() {

@@ -87,7 +87,7 @@ public class GameEngine {
   }
 
   //performs the placement of the elements between stacks
-  public boolean moveCard(int from,int count,int to) {
+  public void moveCard(int from,int count,int to) {
     //int from=3;move from stack 3
     //int count=1;# of cards to move from stack 3
     //int to=2;move to stack 2
@@ -116,9 +116,8 @@ public class GameEngine {
         /*if(flipCount==0&&stackArray[0].size()<3&&stack0.empty()) {
           toFoundation();
         }*/
-      } else {/*audioAlert();System.out.print(" (NOT VALID)");*/return false;}
-    } else {audioAlert();return false;}
-    return true;
+      } else {audioAlert();System.out.print(" (NOT VALID)");}
+    } else {audioAlert();}
   }
 
   //Steps back one movement
@@ -147,6 +146,30 @@ public class GameEngine {
       }
       foundationSize=stack9.size()+stack10.size()+stack11.size()+stack12.size();
       undoStack.pop();
+    }
+  }
+
+  public void moveCardDoubleClick(int from) {
+    boolean passed=false;
+    if(stackArray[from].size()>0) {
+      Card card=((Card)stackArray[from].peek());
+      for(int i=8;i<12;i++) {
+        if(stackArray[i].checkCard(card)) {
+          stackArray[i].push(card);
+          stackArray[from].pop();
+          if(stackArray[from].size()>0)
+            ((Card)stackArray[from].peek()).setFlipState(true);
+          undoStack.push(new int[]{i,1,from,0});
+          passed=true;
+          break;
+        }
+      }
+      System.out.print("\nFast move from pile "+from+" to foundations");
+
+      if(!passed) {
+        audioAlert();
+        System.out.print(" (NOT VALID)");
+      }
     }
   }
 
