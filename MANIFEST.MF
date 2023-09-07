@@ -1,5 +1,0 @@
-Manifest-Version: 1.0
-Ant-Version: Apache Ant 1.9.16
-Created-By: 11.0.4+10-LTS (Oracle Corporation)
-Main-Class: io.bitlab.api.launch.Solitaire
-

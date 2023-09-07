@@ -4,6 +4,7 @@
   <property name="build.dir"   value="build"/>
   <property name="classes.dir" value="build/classes"/>
   <property name="jar.dir"     value="build"/>
+  <property name="metainf.dir" value="META-INF"/>
  
   <mkdir dir="${src.dir}"/>
   <path id="classpath">
@@ -22,10 +23,11 @@
 
   <target name="jar">
     <mkdir dir="${jar.dir}"/>
-    <manifest file="MANIFEST.MF">
+    <mkdir dir="${metainf.dir}"/>
+    <manifest file="${metainf.dir}/MANIFEST.MF">
       <attribute name="Main-Class" value="io.bitlab.api.launch.Solitaire"/>
     </manifest>
-    <jar destfile="${jar.dir}/klondike.jar" basedir="${classes.dir}" manifest="MANIFEST.MF" />
+    <jar destfile="${jar.dir}/klondike.jar" basedir="${classes.dir}" manifest="${metainf.dir}/MANIFEST.MF" />
   </target>
 
   <target name="clean-build" depends="clean,jar"/>
