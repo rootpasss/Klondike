@@ -14,3 +14,8 @@ Important side note
 The source code has been built and structured using Ant following the MVC design pattern, so
 to recompile it, go to the root directory and just run `ant` to obtain the Jar file directly;
 that resulting .jar will be present in the `build` folder.
+
+Take a look...
+--------------
+![Snapshot1](https://github.com/rootpasss/klondike/blob/main/previews/sol.png)
+![Snapshot2](https://github.com/rootpasss/klondike/blob/main/previews/art.png)
