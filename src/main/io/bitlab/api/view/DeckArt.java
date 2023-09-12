@@ -7,6 +7,8 @@
  */
 package io.bitlab.api.view;
 
+import io.bitlab.api.model.RecordStore;
+
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -32,6 +34,7 @@ public class DeckArt extends JDialog {
   private JButton btnOk;
   private JButton btnCan;
   private String deckName="zArt1";
+  private static int[]val={1,2,3,4,5,6,7,10,14,15,17,20};
 
   public DeckArt() {
     setTitle("Select Card Back");
@@ -64,8 +67,11 @@ public class DeckArt extends JDialog {
     return deckName;
   }
 
+  public static String getDeckName(int index) {
+    return "zArt"+val[index];
+  }
+
   private void addDecks() {
-    int[]val={1,2,3,4,5,6,7,10,14,15,17,20};
     String[]names={"Pattern1","Pattern2","Fishes","Aquarium","FlowerBlack","FlowerBlue",
                    "Robot","Roses","Shell","Castle","PalmBeach","CardHand"};
     int x=14;int y=14;
@@ -85,8 +91,9 @@ public class DeckArt extends JDialog {
       x=x==284?14:x+54;
       y=i>4?104:y;
     }
-    ((Deck)contentPane.getComponent(0)).setSelected(true);
-    deckName=((Deck)contentPane.getComponent(0)).getName();
+    int index=RecordStore.getRecord()[0];
+    ((Deck)contentPane.getComponent(index)).setSelected(true);
+    deckName=((Deck)contentPane.getComponent(index)).getName();
   }
 
   private void clearBorder() {
