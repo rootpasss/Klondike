@@ -12,6 +12,7 @@ import javax.swing.UIManager;
 
 import io.bitlab.api.controller.GameController;
 import io.bitlab.api.model.GameEngine;
+import io.bitlab.api.model.RecordStore;
 import io.bitlab.api.view.DeckArt;
 import io.bitlab.api.view.GameView;
 
@@ -24,6 +25,7 @@ public class Solitaire {
           if(System.getProperty("os.name").equals("Linux"))
             UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
           UIManager.put("OptionPane.questionIcon",new javax.swing.ImageIcon(getClass().getResource("/suits/zwarning.png")));
+          RecordStore.openRecordStore();
           new GameController(new GameView(),new GameEngine(),new DeckArt());
         } catch(Exception e) {
           e.printStackTrace();
