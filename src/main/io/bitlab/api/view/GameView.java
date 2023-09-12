@@ -7,6 +7,8 @@
  */
 package io.bitlab.api.view;
 
+import io.bitlab.api.model.RecordStore;
+
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -110,7 +112,8 @@ public class GameView extends JFrame {
         } else {
           card="???";
         }
-        is=getClass().getResourceAsStream("/suits/"+(card.equals("???")?"zArt1":card)+".png");
+        int index=RecordStore.getRecord()[0];
+        is=getClass().getResourceAsStream("/suits/"+(card.equals("???")?DeckArt.getDeckName(index):card)+".png");
         imagemap.put(card,ImageIO.read(is));
       }
     } catch(IOException e) {e.printStackTrace();JOptionPane.showMessageDialog(null,e);System.exit(0);}
