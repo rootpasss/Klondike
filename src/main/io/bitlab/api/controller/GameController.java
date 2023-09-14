@@ -16,6 +16,7 @@ import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 
 import io.bitlab.api.model.GameEngine;
+import io.bitlab.api.model.RecordStore;
 import io.bitlab.api.view.DeckArt;
 import io.bitlab.api.view.GameView;
 
@@ -23,11 +24,18 @@ public class GameController {
   private GameEngine ge;
   private GameView gv;
   private DeckArt da;
+  private int deckIndex;
+  private int played;
+  private int won;
+  private RecordStore rs=RecordStore.openRecordStore();
 
   public GameController(GameView gv,GameEngine ge,DeckArt da) {
     this.gv=gv;
     this.ge=ge;
     this.da=da;
+    deckIndex=RecordStore.getRecord()[0];
+    played=RecordStore.getRecord()[1];
+    won=RecordStore.getRecord()[2];
     gv.addClickListener(new MouseAdapter() {
       @Override
       public void mouseClicked(MouseEvent evt) {
@@ -74,6 +82,20 @@ public class GameController {
     gv.addDealListener(e->createNewGame());
     gv.addUndoListener(e->undo());
     gv.addDeckListener(e->deck());
+    gv.addDestroyListener(new java.awt.event.WindowAdapter() {
+      @Override
+      public void windowClosing(java.awt.event.WindowEvent evt) {
+        destroy();
+      }
+    });
+    gv.addStatsListener(new javax.swing.AbstractAction() {
+      @Override
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        String stats="<html><h2><b>Games Played: "+played+"</b></h2><h2><b>Games Won: "+
+                     won+"</b></h2></p></html>";
+        JOptionPane.showMessageDialog(gv,stats,"Solitaire Stats",JOptionPane.PLAIN_MESSAGE);
+      }
+    });
     da.addDeckDialogListener(e->changeDeck());
     showGameState();
   }
@@ -82,6 +104,8 @@ public class GameController {
     if(JOptionPane.showConfirmDialog(gv,"Deal New?","Solitaire",JOptionPane.YES_NO_OPTION)==0) {
       ge.newGame();
       showGameState();
+      played++;
+      rs.setRecord(new int[]{deckIndex,played,won});
     }
   }
 
@@ -95,10 +119,15 @@ public class GameController {
     da.setVisible(true);
   }
 
+  private void destroy() {
+    rs.setRecord(new int[]{deckIndex,played,won});
+  }
+
   private void changeDeck() {
     GameView.imagemap.remove("???");
     try {
       GameView.imagemap.put("???",ImageIO.read(getClass().getResourceAsStream("/suits/"+da.getDeckName())));
+      deckIndex=da.getDeckIndex();
       gv.updateUI(ge.getStacks());
       da.setVisible(false);
     } catch(Exception e) {e.printStackTrace();}
@@ -109,9 +138,12 @@ public class GameController {
     gv.enableUndoButton(ge.isEmptyStack());
     if(ge.isWinner()) {
       gv.enableUndoButton(true);
+      won++;
       if(JOptionPane.showConfirmDialog(gv,"Deal Again?","Solitaire",JOptionPane.YES_NO_OPTION)==0) {
         ge.newGame();
         gv.updateUI(ge.getStacks());
+        played++;
+        rs.setRecord(new int[]{deckIndex,played,won});
       }
     }
   }
