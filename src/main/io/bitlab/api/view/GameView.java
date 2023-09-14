@@ -10,6 +10,7 @@ package io.bitlab.api.view;
 import io.bitlab.api.model.RecordStore;
 
 import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
@@ -63,6 +64,16 @@ public class GameView extends JFrame {
         g2.drawImage(back,0,0,null);
       }
     };
+    contentPane.getInputMap(contentPane.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
+               .put(javax.swing.KeyStroke.getKeyStroke("S"),"stats");
+    contentPane.getActionMap().put("stats",new javax.swing.AbstractAction() {
+      @Override
+      public void actionPerformed(ActionEvent evt) {
+        String stats="<html><h2><b>Games Played: "+RecordStore.getRecord()[1]+"</b></h2><h2><b>Games Won: "+
+                     RecordStore.getRecord()[2]+"</b></h2></p></html>";
+        JOptionPane.showMessageDialog(contentPane,stats,"Solitaire Stats",JOptionPane.PLAIN_MESSAGE);
+      }
+    });
     add(contentPane);
     loadCards();
     createArea();
