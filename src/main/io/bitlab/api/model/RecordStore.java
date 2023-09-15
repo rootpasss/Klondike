@@ -20,7 +20,7 @@ public class RecordStore {
   private static final File _FILE=new File(FILE_PATH+FILE_NAME);
   private static byte[] bytes=null;
 
-  public static void openRecordStore() {
+  public static RecordStore openRecordStore() {
     try(FileInputStream fis=new FileInputStream(_FILE);
         ObjectInputStream ois=new ObjectInputStream(fis)) {
       bytes=(byte[])ois.readObject();
@@ -30,6 +30,7 @@ public class RecordStore {
     } catch(Exception e) {
       e.printStackTrace();
     }
+    return new RecordStore();
   }
 
   public static byte[] getRecord() {
