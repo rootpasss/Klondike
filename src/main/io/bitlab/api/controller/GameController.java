@@ -138,13 +138,13 @@ public class GameController {
     gv.enableUndoButton(ge.isEmptyStack());
     if(ge.isWinner()) {
       gv.enableUndoButton(true);
-      won++;
       if(JOptionPane.showConfirmDialog(gv,"Deal Again?","Solitaire",JOptionPane.YES_NO_OPTION)==0) {
         ge.newGame();
         gv.updateUI(ge.getStacks());
-        played++;
-        rs.setRecord(new int[]{deckIndex,played,won});
       }
+      played++;
+      won++;
+      rs.setRecord(new int[]{deckIndex,played,won});
     }
   }
 }
