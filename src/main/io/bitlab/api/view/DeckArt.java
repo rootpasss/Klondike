@@ -35,6 +35,7 @@ public class DeckArt extends JDialog {
   private JButton btnCan;
   private String deckName="zArt1";
   private static int[]val={1,2,3,4,5,6,7,10,14,15,17,20};
+  private int index;
 
   public DeckArt() {
     setTitle("Select Card Back");
@@ -71,6 +72,13 @@ public class DeckArt extends JDialog {
     return "zArt"+val[index];
   }
 
+  public int getDeckIndex() {
+    for(int i=0;i<contentPane.getComponentCount();i++)
+      if(((Deck)contentPane.getComponent(i)).isSelected())
+        return i;
+    return 0;
+  }
+
   private void addDecks() {
     String[]names={"Pattern1","Pattern2","Fishes","Aquarium","FlowerBlack","FlowerBlue",
                    "Robot","Roses","Shell","Castle","PalmBeach","CardHand"};
@@ -91,7 +99,7 @@ public class DeckArt extends JDialog {
       x=x==284?14:x+54;
       y=i>4?104:y;
     }
-    int index=RecordStore.getRecord()[0];
+    index=RecordStore.getRecord()[0];
     ((Deck)contentPane.getComponent(index)).setSelected(true);
     deckName=((Deck)contentPane.getComponent(index)).getName();
   }
@@ -121,6 +129,10 @@ class Deck extends JLabel {
   public void renderDeck() {
     setBackground(state?Color.BLUE.darker():Color.WHITE);
     repaint();
+  }
+
+  public boolean isSelected() {
+    return state;
   }
 
   @Override
