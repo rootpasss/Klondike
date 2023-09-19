@@ -20,6 +20,7 @@ public class Solitaire {
     SwingUtilities.invokeLater(new Runnable() {
       @Override
       public void run() {
+        printHeader();
         try {
           if(System.getProperty("os.name").equals("Linux"))
             UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
@@ -30,5 +31,11 @@ public class Solitaire {
         }
       }
     });
+  }
+
+  private static void printHeader() {
+    System.out.println("Solitaire-Klondike: a Java classic version");
+    System.out.println("(c)2023 JNY");
+    System.out.println("github.com/rootpasss\n");
   }
 }
