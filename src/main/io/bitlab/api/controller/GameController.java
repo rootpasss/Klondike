@@ -114,6 +114,7 @@ public class GameController {
     if(JOptionPane.showConfirmDialog(gv,"Deal New?","Solitaire",JOptionPane.YES_NO_OPTION)==0) {
       ge.newGame();
       showGameState();
+      inAction=false;
     }
   }
 
@@ -128,8 +129,7 @@ public class GameController {
   }
 
   private void destroy() {
-    if(inAction||deckChanged)
-      rs.setRecord(new int[]{deckIndex,played,won});
+    rs.setRecord(new int[]{deckIndex,played,won});
   }
 
   private void changeDeck() {
@@ -153,8 +153,6 @@ public class GameController {
         gv.updateUI(ge.getStacks());
       }
       deckChanged=false;
-      inAction=false;
-      played++;
       won++;
       rs.setRecord(new int[]{deckIndex,played,won});
     }
