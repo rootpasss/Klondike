@@ -18,38 +18,31 @@ public class RecordStore {
   private static final String FILE_PATH=System.getProperty("user.home")+"/.klondike";
   private static final String FILE_NAME="/rms_klondike";
   private static final File _FILE=new File(FILE_PATH+FILE_NAME);
-  private static byte[] bytes=null;
+  private static int[] data=null;
 
   public static RecordStore openRecordStore() {
     try(FileInputStream fis=new FileInputStream(_FILE);
         ObjectInputStream ois=new ObjectInputStream(fis)) {
-      bytes=(byte[])ois.readObject();
+      data=(int[])ois.readObject();
     } catch(FileNotFoundException e) {
       new File(FILE_PATH).mkdir();
-      bytes=toByteArray(new int[]{0,0,0});
+      data=new int[]{0,0,0};
     } catch(Exception e) {
       e.printStackTrace();
     }
     return new RecordStore();
   }
 
-  public static byte[] getRecord() {
-    return bytes;
+  public static int[] getRecord() {
+    return data;
   }
 
   public void setRecord(int[] data) {
     try(FileOutputStream fos=new FileOutputStream(_FILE);
         ObjectOutputStream oos=new ObjectOutputStream(fos)) {
-      oos.writeObject(toByteArray(data));
+      oos.writeObject(data);
     } catch(Exception e) {
       e.printStackTrace();
     }
-  }
-
-  private static byte[] toByteArray(int[] data) {
-    byte[]bytes=new byte[data.length];
-    for(int i=0;i<data.length;i++)
-      bytes[i]=(byte)data[i];
-    return bytes;
   }
 }
