@@ -99,7 +99,8 @@ public class DeckArt extends JDialog {
       x=x==284?14:x+54;
       y=i>4?104:y;
     }
-    index=RecordStore.getRecord()[0];
+    RecordStore rs=RecordStore.openRecordStore();
+    index=rs.getRecord()[0];
     ((Deck)contentPane.getComponent(index)).setSelected(true);
     deckName=((Deck)contentPane.getComponent(index)).getName();
   }
