@@ -36,6 +36,6 @@ public class Solitaire {
   private static void printHeader() {
     System.out.println("Solitaire-Klondike: a Java classic version");
     System.out.println("(c)2023 JNY");
-    System.out.println("github.com/rootpasss\n");
+    System.out.println("more projects in github.com/rootpasss\n");
   }
 }
