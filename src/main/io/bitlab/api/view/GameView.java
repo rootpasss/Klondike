@@ -207,6 +207,12 @@ public class GameView extends JFrame {
     addWindowListener(l);
   }
 
+  public void addDealKeyListener(javax.swing.AbstractAction l) {
+    contentPane.getInputMap(contentPane.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
+               .put(javax.swing.KeyStroke.getKeyStroke("N"),"deal");
+    contentPane.getActionMap().put("deal",l);
+  }
+
   public void addStatsListener(javax.swing.AbstractAction l) {
     contentPane.getInputMap(contentPane.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
                .put(javax.swing.KeyStroke.getKeyStroke("S"),"stats");
