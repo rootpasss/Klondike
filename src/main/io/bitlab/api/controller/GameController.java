@@ -98,6 +98,12 @@ public class GameController {
         destroy();
       }
     });
+    gv.addDealKeyListener(new javax.swing.AbstractAction() {
+      @Override
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        createNewGame();
+      }
+    });
     gv.addStatsListener(new javax.swing.AbstractAction() {
       @Override
       public void actionPerformed(java.awt.event.ActionEvent evt) {
