@@ -104,6 +104,12 @@ public class GameController {
         createNewGame();
       }
     });
+    gv.addUndoKeyListener(new javax.swing.AbstractAction() {
+      @Override
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        undo();
+      }
+    });
     gv.addStatsListener(new javax.swing.AbstractAction() {
       @Override
       public void actionPerformed(java.awt.event.ActionEvent evt) {
