@@ -110,6 +110,12 @@ public class GameController {
         undo();
       }
     });
+    gv.addDeckKeyListener(new javax.swing.AbstractAction() {
+      @Override
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        deck();
+      }
+    });
     gv.addStatsListener(new javax.swing.AbstractAction() {
       @Override
       public void actionPerformed(java.awt.event.ActionEvent evt) {
