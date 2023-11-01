@@ -9,6 +9,7 @@ package io.bitlab.api.view;
 
 import io.bitlab.api.model.RecordStore;
 
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -21,6 +22,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
 
+import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -45,6 +47,10 @@ public class DeckArt extends JDialog {
     setModalityType(ModalityType.APPLICATION_MODAL);
 
     contentPane=new JPanel(null);
+    //TODO: import KeyStroke instead of use the fully qualified name
+    contentPane.getInputMap(contentPane.WHEN_IN_FOCUSED_WINDOW)
+               .put(javax.swing.KeyStroke.getKeyStroke("ESCAPE"),"close");
+    contentPane.getActionMap().put("close",new StrokeAction());
     add(contentPane);
 
     btnOk=new JButton("Ok");
@@ -108,6 +114,13 @@ public class DeckArt extends JDialog {
   private void clearBorder() {
     for(int i=0;i<contentPane.getComponentCount();i++)
       ((Deck)contentPane.getComponent(i)).setSelected(false);
+  }
+
+  protected class StrokeAction extends AbstractAction {
+    @Override
+    public void actionPerformed(ActionEvent evt) {
+      dispose();
+    }
   }
 }
 
