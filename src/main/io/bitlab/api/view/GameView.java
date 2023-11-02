@@ -197,27 +197,31 @@ public class GameView extends JFrame {
   }
 
   public void addDealKeyListener(javax.swing.AbstractAction l) {
-    contentPane.getInputMap(contentPane.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
+    /*contentPane.getInputMap(contentPane.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
                .put(javax.swing.KeyStroke.getKeyStroke("N"),"deal");
-    contentPane.getActionMap().put("deal",l);
+    contentPane.getActionMap().put("deal",l);*/
+    applyKeyStroke(l,"N","deal");
   }
 
   public void addUndoKeyListener(javax.swing.AbstractAction l) {
-    contentPane.getInputMap(contentPane.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
+    /*contentPane.getInputMap(contentPane.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
                .put(javax.swing.KeyStroke.getKeyStroke("U"),"undo");
-    contentPane.getActionMap().put("undo",l);
+    contentPane.getActionMap().put("undo",l);*/
+    applyKeyStroke(l,"U","undo");
   }
 
   public void addDeckKeyListener(javax.swing.AbstractAction l) {
-    contentPane.getInputMap(contentPane.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
+    /*contentPane.getInputMap(contentPane.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
                .put(javax.swing.KeyStroke.getKeyStroke("D"),"deck");
-    contentPane.getActionMap().put("deck",l);
+    contentPane.getActionMap().put("deck",l);*/
+    applyKeyStroke(l,"D","deck");
   }
 
   public void addStatsListener(javax.swing.AbstractAction l) {
-    contentPane.getInputMap(contentPane.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
+    /*contentPane.getInputMap(contentPane.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
                .put(javax.swing.KeyStroke.getKeyStroke("S"),"stats");
-    contentPane.getActionMap().put("stats",l);
+    contentPane.getActionMap().put("stats",l);*/
+    applyKeyStroke(l,"S","stats");
   }
 
   public int getFromIndex() {
@@ -234,6 +238,12 @@ public class GameView extends JFrame {
 
   public List<Rectangle2D.Double> getItems(int index) {
     return arealist.get(index).getCardList();
+  }
+
+  private void applyKeyStroke(javax.swing.AbstractAction a,String s,String d) {
+    contentPane.getInputMap(contentPane.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
+               .put(javax.swing.KeyStroke.getKeyStroke(s),d);
+    contentPane.getActionMap().put(d,a);
   }
 }
 
