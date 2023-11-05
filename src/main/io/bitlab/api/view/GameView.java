@@ -201,9 +201,6 @@ public class GameView extends JFrame {
   }
 
   public void addUndoKeyListener(javax.swing.AbstractAction l) {
-    /*contentPane.getInputMap(contentPane.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
-               .put(javax.swing.KeyStroke.getKeyStroke("U"),"undo");
-    contentPane.getActionMap().put("undo",l);*/
     applyKeyStroke(l,"U","undo");
   }
 
