@@ -205,9 +205,6 @@ public class GameView extends JFrame {
   }
 
   public void addDeckKeyListener(javax.swing.AbstractAction l) {
-    /*contentPane.getInputMap(contentPane.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
-               .put(javax.swing.KeyStroke.getKeyStroke("D"),"deck");
-    contentPane.getActionMap().put("deck",l);*/
     applyKeyStroke(l,"D","deck");
   }
 
