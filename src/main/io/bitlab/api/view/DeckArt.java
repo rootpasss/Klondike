@@ -38,6 +38,7 @@ public class DeckArt extends JDialog {
   private String deckName="zArt1";
   private static int[]val={1,2,3,4,5,6,7,10,14,15,17,20};
   private int index;
+  private int tmp;
 
   public DeckArt() {
     setTitle("Select Card Back");
@@ -50,12 +51,24 @@ public class DeckArt extends JDialog {
     //TODO: import KeyStroke instead of use the fully qualified name
     contentPane.getInputMap(contentPane.WHEN_IN_FOCUSED_WINDOW)
                .put(javax.swing.KeyStroke.getKeyStroke("ESCAPE"),"close");
-    contentPane.getActionMap().put("close",new StrokeAction());
+    contentPane.getInputMap(contentPane.WHEN_IN_FOCUSED_WINDOW)
+               .put(javax.swing.KeyStroke.getKeyStroke("LEFT"),"move_left");
+    contentPane.getInputMap(contentPane.WHEN_IN_FOCUSED_WINDOW)
+               .put(javax.swing.KeyStroke.getKeyStroke("RIGHT"),"move_right");
+    contentPane.getInputMap(contentPane.WHEN_IN_FOCUSED_WINDOW)
+               .put(javax.swing.KeyStroke.getKeyStroke("UP"),"move_vert");
+    contentPane.getInputMap(contentPane.WHEN_IN_FOCUSED_WINDOW)
+               .put(javax.swing.KeyStroke.getKeyStroke("DOWN"),"move_vert");
+    contentPane.getActionMap().put("close",new StrokeAction(0));
+    contentPane.getActionMap().put("move_left",new StrokeAction(1));
+    contentPane.getActionMap().put("move_right",new StrokeAction(2));
+    contentPane.getActionMap().put("move_vert",new StrokeAction(3));
     add(contentPane);
 
     btnOk=new JButton("Ok");
     btnCan=new JButton("Cancel");
     btnCan.addActionListener(e->setVisible(false));
+    //TODO: Bug! when clicking cancel button and reopen dialog the selected deck isnt the actual on the board
 
     btnPane=new JPanel(new FlowLayout(FlowLayout.TRAILING));
     btnPane.add(btnOk);
@@ -106,7 +119,7 @@ public class DeckArt extends JDialog {
       y=i>4?104:y;
     }
     RecordStore rs=RecordStore.openRecordStore();
-    index=rs.getRecord()[0];
+    index=rs.getRecord()[0];tmp=index;
     ((Deck)contentPane.getComponent(index)).setSelected(true);
     deckName=((Deck)contentPane.getComponent(index)).getName();
   }
@@ -117,9 +130,28 @@ public class DeckArt extends JDialog {
   }
 
   protected class StrokeAction extends AbstractAction {
+    private int opt;
+    public StrokeAction(int opt) {
+      this.opt=opt;
+    }
+
     @Override
     public void actionPerformed(ActionEvent evt) {
-      dispose();
+      if(opt>0) {
+        index=getDeckIndex();
+        if(opt==1)
+          index=index>0?index-1:contentPane.getComponentCount()-1;
+        else if(opt==2)
+          index=index<11?index+1:0;
+        else
+          index=index-6<0?index-6*-1:index-6;
+      } else {
+        index=tmp;
+        dispose();
+      }
+      clearBorder();
+      ((Deck)contentPane.getComponent(index)).setSelected(true);
+      deckName=((Deck)contentPane.getComponent(index)).getName();
     }
   }
 }
