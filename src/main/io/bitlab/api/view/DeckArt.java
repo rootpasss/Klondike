@@ -30,7 +30,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
-public class DeckArt extends JDialog {
+public class DeckArt extends JDialog implements ActionListener {
   private JPanel contentPane;
   private JPanel btnPane;
   private JButton btnOk;
@@ -67,7 +67,7 @@ public class DeckArt extends JDialog {
 
     btnOk=new JButton("Ok");
     btnCan=new JButton("Cancel");
-    btnCan.addActionListener(e->setVisible(false));
+    btnCan.addActionListener(this);
     //TODO: Bug! when clicking cancel button and reopen dialog the selected deck isnt the actual on the board
 
     btnPane=new JPanel(new FlowLayout(FlowLayout.TRAILING));
@@ -127,6 +127,16 @@ public class DeckArt extends JDialog {
   private void clearBorder() {
     for(int i=0;i<contentPane.getComponentCount();i++)
       ((Deck)contentPane.getComponent(i)).setSelected(false);
+  }
+
+  @Override
+  public void actionPerformed(ActionEvent evt) {
+    if(evt.getSource()==btnCan) {
+      clearBorder();
+      ((Deck)contentPane.getComponent(tmp)).setSelected(true);
+      deckName=((Deck)contentPane.getComponent(tmp)).getName();
+      dispose();
+    }
   }
 
   protected class StrokeAction extends AbstractAction {
