@@ -68,7 +68,6 @@ public class DeckArt extends JDialog implements ActionListener {
     btnOk=new JButton("Ok");
     btnCan=new JButton("Cancel");
     btnCan.addActionListener(this);
-    //TODO: Bug! when clicking cancel button and reopen dialog the selected deck isnt the actual on the board
 
     btnPane=new JPanel(new FlowLayout(FlowLayout.TRAILING));
     btnPane.add(btnOk);
