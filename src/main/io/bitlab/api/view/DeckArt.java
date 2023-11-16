@@ -28,6 +28,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 import javax.swing.WindowConstants;
 
 public class DeckArt extends JDialog implements ActionListener {
@@ -50,15 +51,15 @@ public class DeckArt extends JDialog implements ActionListener {
     contentPane=new JPanel(null);
     //TODO: import KeyStroke instead of use the fully qualified name
     contentPane.getInputMap(contentPane.WHEN_IN_FOCUSED_WINDOW)
-               .put(javax.swing.KeyStroke.getKeyStroke("ESCAPE"),"close");
+               .put(KeyStroke.getKeyStroke("ESCAPE"),"close");
     contentPane.getInputMap(contentPane.WHEN_IN_FOCUSED_WINDOW)
-               .put(javax.swing.KeyStroke.getKeyStroke("LEFT"),"move_left");
+               .put(KeyStroke.getKeyStroke("LEFT"),"move_left");
     contentPane.getInputMap(contentPane.WHEN_IN_FOCUSED_WINDOW)
-               .put(javax.swing.KeyStroke.getKeyStroke("RIGHT"),"move_right");
+               .put(KeyStroke.getKeyStroke("RIGHT"),"move_right");
     contentPane.getInputMap(contentPane.WHEN_IN_FOCUSED_WINDOW)
-               .put(javax.swing.KeyStroke.getKeyStroke("UP"),"move_vert");
+               .put(KeyStroke.getKeyStroke("UP"),"move_vert");
     contentPane.getInputMap(contentPane.WHEN_IN_FOCUSED_WINDOW)
-               .put(javax.swing.KeyStroke.getKeyStroke("DOWN"),"move_vert");
+               .put(KeyStroke.getKeyStroke("DOWN"),"move_vert");
     contentPane.getActionMap().put("close",new StrokeAction(0));
     contentPane.getActionMap().put("move_left",new StrokeAction(1));
     contentPane.getActionMap().put("move_right",new StrokeAction(2));
