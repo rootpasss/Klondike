@@ -13,6 +13,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowListener;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
@@ -171,7 +172,7 @@ public class GameView extends JFrame {
     //System.out.println();//debug only
   }
 
-  public void addClickListener(java.awt.event.MouseListener l) {
+  public void addClickListener(MouseListener l) {
     for(int i=0;i<contentPane.getComponentCount();i++)
       ((javax.swing.JComponent)contentPane.getComponent(i)).addMouseListener(l);
   }
