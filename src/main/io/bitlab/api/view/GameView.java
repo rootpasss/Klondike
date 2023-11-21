@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
+import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -197,7 +198,7 @@ public class GameView extends JFrame {
     addWindowListener(l);
   }
 
-  public void addDealKeyListener(javax.swing.AbstractAction l) {
+  public void addDealKeyListener(AbstractAction l) {
     applyKeyStroke(l,"N","deal");
   }
 
