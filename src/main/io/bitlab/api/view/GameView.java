@@ -202,7 +202,7 @@ public class GameView extends JFrame {
     applyKeyStroke(l,"N","deal");
   }
 
-  public void addUndoKeyListener(javax.swing.AbstractAction l) {
+  public void addUndoKeyListener(AbstractAction l) {
     applyKeyStroke(l,"U","undo");
   }
 
