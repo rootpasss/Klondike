@@ -206,7 +206,7 @@ public class GameView extends JFrame {
     applyKeyStroke(l,"U","undo");
   }
 
-  public void addDeckKeyListener(javax.swing.AbstractAction l) {
+  public void addDeckKeyListener(AbstractAction l) {
     applyKeyStroke(l,"D","deck");
   }
 
