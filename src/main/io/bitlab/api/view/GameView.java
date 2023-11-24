@@ -210,7 +210,7 @@ public class GameView extends JFrame {
     applyKeyStroke(l,"D","deck");
   }
 
-  public void addStatsListener(javax.swing.AbstractAction l) {
+  public void addStatsListener(AbstractAction l) {
     applyKeyStroke(l,"S","stats");
   }
 
