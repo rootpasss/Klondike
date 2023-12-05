@@ -17,8 +17,10 @@ import java.awt.event.MouseListener;
 import java.awt.event.WindowListener;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GridLayout;
 
 import java.io.InputStream;
 import java.io.IOException;
@@ -32,6 +34,7 @@ import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -46,11 +49,14 @@ public class GameView extends JFrame {
   public static int from;
   public static int to;
   private JPanel contentPane;
+  private JPanel statusPane;
   private BufferedImage back;
   private JButton btnDeal;
   private JButton btnDeck;
   private JButton btnUndo;
   private RecordStore rs=RecordStore.openRecordStore();
+  private JLabel lblBonus;
+  private JLabel lblScore;
 
   public GameView() {
     super("Solitaire");
@@ -72,9 +78,25 @@ public class GameView extends JFrame {
     loadCards();
     createArea();
     addButtons();
+    addStatusBar();
     setVisible(true);
     System.out.printf("%c %c %c %c  Welcome to Solitaire! %c %c %c %c%n",
     '\u2667','\u2662','\u2661','\u2664','\u2664','\u2661','\u2662','\u2667');
+  }
+
+  private void addStatusBar() {
+    statusPane=new JPanel(new GridLayout(1,2));
+    statusPane.setBounds(0,getHeight()-42,getWidth(),20);
+    lblBonus=new JLabel();
+    lblScore=new JLabel("Score: 0 Time: 0  ");
+    lblBonus.setOpaque(true);
+    lblScore.setOpaque(true);
+    lblBonus.setBackground(Color.decode("#FFFFFF"));
+    lblScore.setBackground(lblBonus.getBackground());
+    lblScore.setHorizontalAlignment(JLabel.RIGHT);
+    statusPane.add(lblBonus);
+    statusPane.add(lblScore);
+    contentPane.add(statusPane);
   }
 
   private void addButtons() {
@@ -171,6 +193,10 @@ public class GameView extends JFrame {
     }
     repaint();
     //System.out.println();//debug only
+  }
+
+  public void updateTime(int t,int s) {
+    lblScore.setText("Score: "+s+" Time: "+t+"  ");
   }
 
   public void addClickListener(MouseListener l) {
