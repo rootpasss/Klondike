@@ -11,6 +11,9 @@ import java.awt.geom.Rectangle2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import javax.imageio.ImageIO;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
@@ -30,6 +33,8 @@ public class GameController {
   private RecordStore rs=RecordStore.openRecordStore();
   private boolean inAction=false;
   private boolean deckChanged=false;
+  private int s;
+  private Timer t;
 
   public GameController(GameView gv,GameEngine ge,DeckArt da) {
     this.gv=gv;
@@ -52,6 +57,7 @@ public class GameController {
             if(!inAction) {
               inAction=true;
               played++;
+              t=startTimer();
             }
           }
           GameView.pick=false;
@@ -62,6 +68,10 @@ public class GameController {
               gv.updateUI(ge.getStacks());
               gv.enableUndoButton(ge.isEmptyStack());
               GameView.pick=false;
+              if(!inAction) {
+                inAction=true;
+                t=startTimer();
+              }
             } else if(from>0&&from<8) {
               for(Rectangle2D.Double r:cards) {
                 if(r.contains(evt.getX(),evt.getY())) {
@@ -84,6 +94,7 @@ public class GameController {
             if(!inAction) {
               inAction=true;
               played++;
+              t=startTimer();
             }
           }
         }
@@ -133,6 +144,9 @@ public class GameController {
       ge.newGame();
       showGameState();
       inAction=false;
+      t.cancel();
+      t.purge();
+      gv.updateTime(0,0);
     }
   }
 
@@ -169,10 +183,23 @@ public class GameController {
       if(JOptionPane.showConfirmDialog(gv,"Deal Again?","Solitaire",JOptionPane.YES_NO_OPTION)==0) {
         ge.newGame();
         gv.updateUI(ge.getStacks());
+        gv.updateTime(0,0);
       }
       deckChanged=false;
       won++;
       rs.setRecord(new int[]{deckIndex,played,won});
     }
+  }
+
+  private Timer startTimer() {
+    Timer t=new Timer();
+    t.scheduleAtFixedRate(new TimerTask() {
+      int c=0;
+      @Override
+      public void run() {
+        gv.updateTime(c++,s);
+      }
+    },0,1000);
+    return t;
   }
 }
