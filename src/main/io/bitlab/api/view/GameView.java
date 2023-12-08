@@ -78,15 +78,15 @@ public class GameView extends JFrame {
     loadCards();
     createArea();
     addButtons();
-    addStatusBar();
     setVisible(true);
+    addStatusBar();
     System.out.printf("%c %c %c %c  Welcome to Solitaire! %c %c %c %c%n",
     '\u2667','\u2662','\u2661','\u2664','\u2664','\u2661','\u2662','\u2667');
   }
 
   private void addStatusBar() {
     statusPane=new JPanel(new GridLayout(1,2));
-    statusPane.setBounds(0,getHeight()-42,getWidth(),20);
+    statusPane.setBounds(0,getHeight()-(getInsets().top+20),getWidth(),20);
     lblBonus=new JLabel();
     lblScore=new JLabel("Score: 0 Time: 0  ");
     lblBonus.setOpaque(true);
