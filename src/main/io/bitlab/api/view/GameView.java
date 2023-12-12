@@ -20,7 +20,8 @@ import java.awt.image.BufferedImage;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.GridLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 
 import java.io.InputStream;
 import java.io.IOException;
@@ -57,6 +58,7 @@ public class GameView extends JFrame {
   private RecordStore rs=RecordStore.openRecordStore();
   private JLabel lblBonus;
   private JLabel lblScore;
+  private JLabel lblTime;
 
   public GameView() {
     super("Solitaire");
@@ -85,17 +87,18 @@ public class GameView extends JFrame {
   }
 
   private void addStatusBar() {
-    statusPane=new JPanel(new GridLayout(1,2));
+    GridBagConstraints c=new GridBagConstraints();
+    c.fill=GridBagConstraints.HORIZONTAL;c.weightx=1;
+    statusPane=new JPanel(new GridBagLayout());
+    statusPane.setBackground(Color.decode("#FFFFFF"));
     statusPane.setBounds(0,getHeight()-(getInsets().top+20),getWidth(),20);
     lblBonus=new JLabel();
-    lblScore=new JLabel("Score: 0 Time: 0  ");
-    lblBonus.setOpaque(true);
-    lblScore.setOpaque(true);
-    lblBonus.setBackground(Color.decode("#FFFFFF"));
-    lblScore.setBackground(lblBonus.getBackground());
+    lblScore=new JLabel("Score: 0");
+    lblTime=new JLabel(" Time: 0  ");
     lblScore.setHorizontalAlignment(JLabel.RIGHT);
-    statusPane.add(lblBonus);
-    statusPane.add(lblScore);
+    statusPane.add(lblBonus,c);c.gridx=1;
+    statusPane.add(lblScore,c);c.gridx=2;c.weightx=0;
+    statusPane.add(lblTime,c);
     contentPane.add(statusPane);
   }
 
@@ -195,8 +198,12 @@ public class GameView extends JFrame {
     //System.out.println();//debug only
   }
 
-  public void updateTime(int t,int s) {
-    lblScore.setText("Score: "+s+" Time: "+t+"  ");
+  public void updateTime(int t) {
+    lblTime.setText(" Time: "+t+"  ");
+  }
+
+  public void updateScore(int s) {
+    lblScore.setText("Score: "+s);
   }
 
   public void addClickListener(MouseListener l) {
