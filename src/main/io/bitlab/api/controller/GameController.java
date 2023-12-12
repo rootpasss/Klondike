@@ -146,7 +146,8 @@ public class GameController {
       inAction=false;
       t.cancel();
       t.purge();
-      gv.updateTime(0,0);
+      gv.updateTime(0);
+      gv.updateScore(0);
     }
   }
 
@@ -178,12 +179,15 @@ public class GameController {
   private void showGameState() {
     gv.updateUI(ge.getStacks());
     gv.enableUndoButton(ge.isEmptyStack());
+    gv.updateScore(ge.getScore());
     if(ge.isWinner()) {
       gv.enableUndoButton(true);
+      t.cancel();t.purge();
       if(JOptionPane.showConfirmDialog(gv,"Deal Again?","Solitaire",JOptionPane.YES_NO_OPTION)==0) {
         ge.newGame();
         gv.updateUI(ge.getStacks());
-        gv.updateTime(0,0);
+        gv.updateTime(0);
+        gv.updateScore(0);
       }
       deckChanged=false;
       won++;
@@ -197,7 +201,7 @@ public class GameController {
       int c=0;
       @Override
       public void run() {
-        gv.updateTime(c++,s);
+        gv.updateTime(c++);
       }
     },0,1000);
     return t;
