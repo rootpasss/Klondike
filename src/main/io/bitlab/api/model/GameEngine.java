@@ -17,6 +17,7 @@ public class GameEngine {
   private Stack<int[]>undoStack=new Stack<>();
   private int foundationSize;
   private int flipCount;
+  private int score;
 
   private CardStack stack0=new CardStack(-1);//this is the Stock pile
   private CardStack stack1=new CardStack(-1);//this is the Waste pile
@@ -105,10 +106,18 @@ public class GameEngine {
 
         if(stackArray[from].size()>0&&!((Card)stackArray[from].peek()).getFlipState()) {
           ((Card)stackArray[from].peek()).setFlipState(true);
-          if(from>0)
+          if(from>0) {
             flipCount--;
+            score+=5;
+          }
           wasFlip=1;
         }
+        if(to>=8)
+          score+=10;
+        else if(from==0&&to>0&&to<8)
+          score+=5;
+        else if(from>=8&&to<8)
+          score-=10;
         undoStack.push(new int[]{to,count,from,wasFlip});
 
         //DISABLED BECAUSE THE CLASSIC SOLITAIRE DOES NOT USE AN AUTOMATIC CARD MOVE TO FOUNDATIONS.
@@ -152,16 +161,21 @@ public class GameEngine {
   //Move a valid card to foundations when a double click event is triggered
   public void moveCardDoubleClick(int from) {
     boolean passed=false;
+    int f=0;
     if(stackArray[from].size()>0) {
       Card card=((Card)stackArray[from].peek());
       for(int i=8;i<12;i++) {
         if(stackArray[i].checkCard(card)) {
           stackArray[i].push(card);
           stackArray[from].pop();
-          if(stackArray[from].size()>0)
+          if(stackArray[from].size()>0&&!((Card)stackArray[from].peek()).getFlipState()) {
             ((Card)stackArray[from].peek()).setFlipState(true);
-          undoStack.push(new int[]{i,1,from,0});
+            score+=5;
+            f=1;
+          }
+          undoStack.push(new int[]{i,1,from,f});
           passed=true;
+          score+=10;
           break;
         }
       }
@@ -176,6 +190,10 @@ public class GameEngine {
 
   public Stack[] getStacks() {
     return stackArray;
+  }
+
+  public int getScore() {
+    return score;
   }
 
   //returns a representative text to show the actual game progress
