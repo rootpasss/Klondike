@@ -33,7 +33,6 @@ public class GameController {
   private RecordStore rs=RecordStore.openRecordStore();
   private boolean inAction=false;
   private boolean deckChanged=false;
-  private int s;
   private Timer t;
 
   public GameController(GameView gv,GameEngine ge,DeckArt da) {
