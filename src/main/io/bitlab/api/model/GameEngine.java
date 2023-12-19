@@ -138,9 +138,10 @@ public class GameEngine {
       int wasFlip=undoStack.peek()[3];
       Object[]obj=stackArray[from].toArray();
 
-      if(to>0&&to<12&&wasFlip==1) {
+      if(to>0&&to<12&&wasFlip==1) {//undo when flip-over tableau card
         ((Card)stackArray[to].peek()).setFlipState(false);
         flipCount++;
+        score-=7;
       }
 
       for(int i=0;i<count;i++) {
@@ -153,6 +154,16 @@ public class GameEngine {
         }
         stackArray[from].pop();
       }
+
+      if(from>=8&&to>0)//undo from foundation to tableau
+        score-=12;
+      else if(to==0&&from>=8&&from<12)//undo from foundation to waste
+        score-=12;
+      else if(to==0&&from<8)//undo from tableau to waste
+        score-=7;
+      else if(from>0&&from<7&&to>=8)//undo from tableau to foundation
+        score+=8;
+
       foundationSize=stack9.size()+stack10.size()+stack11.size()+stack12.size();
       undoStack.pop();
     }
