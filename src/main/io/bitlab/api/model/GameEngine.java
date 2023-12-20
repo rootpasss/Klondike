@@ -120,7 +120,8 @@ public class GameEngine {
           score-=10;
         undoStack.push(new int[]{to,count,from,wasFlip});
 
-        //DISABLED BECAUSE THE CLASSIC SOLITAIRE DOES NOT USE AN AUTOMATIC CARD MOVE TO FOUNDATIONS.
+        /*DISABLED BECAUSE THE CLASSIC SOLITAIRE DOES NOT USE AN AUTOMATIC CARD MOVE
+          TO FOUNDATIONS WHEN THE GAME IS WON.*/
         //determines if the game is done
         /*if(flipCount==0&&stackArray[0].size()<3&&stack0.empty()) {
           toFoundation();
