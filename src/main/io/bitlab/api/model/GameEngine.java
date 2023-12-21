@@ -208,6 +208,11 @@ public class GameEngine {
     return score;
   }
 
+  public int subtractScore() {
+    score-=2;
+    return score;
+  }
+
   //returns a representative text to show the actual game progress
   public String getDeckState() {
     String output="";
