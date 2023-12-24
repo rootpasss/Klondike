@@ -200,10 +200,10 @@ public class GameController {
       int c=0;
       @Override
       public void run() {
-        c++;
         gv.updateTime(c);
-        if(c%10==0)
+        if(c%10==0&&c>0)
           gv.updateScore(ge.subtractScore());
+        c++;
       }
     },0,1000);
     return t;
