@@ -206,6 +206,10 @@ public class GameView extends JFrame {
     lblScore.setText("Score: "+s);
   }
 
+  public void updateBonus(int b) {
+    lblBonus.setText(b>=0?"Bonus: "+b:"");
+  }
+
   public void addClickListener(MouseListener l) {
     for(int i=0;i<contentPane.getComponentCount();i++)
       ((javax.swing.JComponent)contentPane.getComponent(i)).addMouseListener(l);
