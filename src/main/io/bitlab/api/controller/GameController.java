@@ -30,6 +30,7 @@ public class GameController {
   private int deckIndex;
   private int played;
   private int won;
+  private int time;
   private RecordStore rs=RecordStore.openRecordStore();
   private boolean inAction=false;
   private boolean deckChanged=false;
@@ -147,6 +148,7 @@ public class GameController {
       t.purge();
       gv.updateTime(0);
       gv.updateScore(0);
+      gv.updateBonus(-1);
     }
   }
 
@@ -180,6 +182,10 @@ public class GameController {
     gv.enableUndoButton(ge.isEmptyStack());
     gv.updateScore(ge.getScore());
     if(ge.isWinner()) {
+      int b=700000/time;
+      int ts=b+ge.getScore();
+      gv.updateBonus(b);
+      gv.updateScore(ts);
       gv.enableUndoButton(true);
       t.cancel();t.purge();
       if(JOptionPane.showConfirmDialog(gv,"Deal Again?","Solitaire",JOptionPane.YES_NO_OPTION)==0) {
@@ -187,11 +193,16 @@ public class GameController {
         gv.updateUI(ge.getStacks());
         gv.updateTime(0);
         gv.updateScore(0);
+        gv.updateBonus(-1);
       }
       deckChanged=false;
       won++;
       rs.setRecord(new int[]{deckIndex,played,won});
     }
+  }
+
+  private void setLocalTiming(int time) {
+    this.time=time;
   }
 
   private Timer startTimer() {
