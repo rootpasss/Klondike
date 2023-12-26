@@ -207,7 +207,7 @@ public class GameView extends JFrame {
   }
 
   public void updateBonus(int b) {
-    lblBonus.setText(b>=0?"Bonus: "+b:"");
+    lblBonus.setText(b>=0?"  Bonus: "+b:"");
   }
 
   public void addClickListener(MouseListener l) {
