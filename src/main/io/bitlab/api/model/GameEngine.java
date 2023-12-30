@@ -36,9 +36,9 @@ public class GameEngine {
                                   stack8,stack9,stack10,stack11,stack12,stack0};
 
   public GameEngine() {
-    createDeck();
+    //createDeck();
     //toFoundation();
-    //fastGame();
+    fastGame();
   }
 
   //moves all remaining cards to the foundation automatically when the game is won
@@ -268,6 +268,7 @@ public class GameEngine {
         stack0.push(card);
       }
     }
+    score=0;
     foundationSize=0;
     undoStack.removeAllElements();
     createStacks();
