@@ -34,6 +34,7 @@ public class GameController {
   private RecordStore rs=RecordStore.openRecordStore();
   private boolean inAction=false;
   private boolean deckChanged=false;
+  private boolean timed=true;
   private Timer t;
 
   public GameController(GameView gv,GameEngine ge,DeckArt da) {
@@ -53,12 +54,12 @@ public class GameController {
         if(evt.getClickCount()==2) {
           if(from>0&&from<8) {
             ge.moveCardDoubleClick(from);
-            showGameState();
             if(!inAction) {
               inAction=true;
               played++;
               t=startTimer();
             }
+            showGameState();
           }
           GameView.pick=false;
         } else {
@@ -71,6 +72,7 @@ public class GameController {
               if(!inAction) {
                 inAction=true;
                 t=startTimer();
+                played++;
               }
             } else if(from>0&&from<8) {
               for(Rectangle2D.Double r:cards) {
@@ -90,12 +92,12 @@ public class GameController {
             GameView.to=from;
             GameView.pick=false;
             ge.moveCard(GameView.from,GameView.total,from);
-            showGameState();
             if(!inAction) {
               inAction=true;
               played++;
               t=startTimer();
             }
+            showGameState();
           }
         }
       }
@@ -141,6 +143,12 @@ public class GameController {
 
   private void createNewGame() {
     if(JOptionPane.showConfirmDialog(gv,"Deal New?","Solitaire",JOptionPane.YES_NO_OPTION)==0) {
+      rs.openRecordStore();
+      int[]data=rs.getRecord();
+      data[0]=deckIndex;
+      data[1]=played;
+      data[2]=won;
+      rs.setRecord(data);
       ge.newGame();
       showGameState();
       inAction=false;
@@ -163,7 +171,12 @@ public class GameController {
   }
 
   private void destroy() {
-    rs.setRecord(new int[]{deckIndex,played,won});
+    rs.openRecordStore();
+    int[]data=rs.getRecord();
+    data[0]=deckIndex;
+    data[1]=played;
+    data[2]=won;
+    rs.setRecord(data);
   }
 
   private void changeDeck() {
@@ -182,12 +195,12 @@ public class GameController {
     gv.enableUndoButton(ge.isEmptyStack());
     gv.updateScore(ge.getScore());
     if(ge.isWinner()) {
-      int b=700000/time;
-      int ts=b+ge.getScore();
-      gv.updateBonus(b);
-      gv.updateScore(ts);
       gv.enableUndoButton(true);
       t.cancel();t.purge();
+      deckChanged=false;
+      inAction=false;
+      won++;
+      storeData();
       if(JOptionPane.showConfirmDialog(gv,"Deal Again?","Solitaire",JOptionPane.YES_NO_OPTION)==0) {
         ge.newGame();
         gv.updateUI(ge.getStacks());
@@ -195,9 +208,36 @@ public class GameController {
         gv.updateScore(0);
         gv.updateBonus(-1);
       }
-      deckChanged=false;
-      won++;
-      rs.setRecord(new int[]{deckIndex,played,won});
+    }
+  }
+
+  private void storeData() {
+    rs.openRecordStore();
+    int[]data=rs.getRecord();
+    data[0]=deckIndex;
+    data[1]=played;
+    data[2]=won;
+
+    if(timed) {
+      java.time.LocalDate date=java.time.LocalDate.now();
+      int b=700000/time;
+      int s=b+ge.getScore();
+      int y=date.getYear();
+      int m=date.getMonthValue();
+      int d=date.getDayOfMonth();
+      int[]apnd=java.util.Arrays.copyOf(data,data.length+7);
+      gv.updateBonus(b);
+      gv.updateScore(s);
+      apnd[data.length]=ge.getScore();
+      apnd[data.length+1]=time;
+      apnd[data.length+2]=b;
+      apnd[data.length+3]=s;
+      apnd[data.length+4]=y;
+      apnd[data.length+5]=m;
+      apnd[data.length+6]=d;
+      rs.setRecord(apnd);
+    } else {
+      rs.setRecord(data);
     }
   }
 
@@ -212,6 +252,7 @@ public class GameController {
       @Override
       public void run() {
         gv.updateTime(c);
+        setLocalTiming(c);
         if(c%10==0&&c>0)
           gv.updateScore(ge.subtractScore());
         c++;
