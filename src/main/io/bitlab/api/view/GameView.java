@@ -34,6 +34,7 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -55,6 +56,7 @@ public class GameView extends JFrame {
   private JButton btnDeal;
   private JButton btnDeck;
   private JButton btnUndo;
+  private JCheckBox cbTimed;
   private RecordStore rs=RecordStore.openRecordStore();
   private JLabel lblBonus;
   private JLabel lblScore;
@@ -99,21 +101,27 @@ public class GameView extends JFrame {
     statusPane.add(lblBonus,c);c.gridx=1;
     statusPane.add(lblScore,c);c.gridx=2;c.weightx=0;
     statusPane.add(lblTime,c);
+    statusPane.setVisible(cbTimed.isSelected());
     contentPane.add(statusPane);
   }
 
   private void addButtons() {
     JPanel btnPane=new JPanel();
     btnPane.setOpaque(false);
-    btnPane.setBounds(getWidth()/2-150,getHeight()-80,300,50);
+    btnPane.setBounds(getWidth()/2-180,getHeight()-80,370,50);
     btnDeal=new JButton("Deal New");
     btnUndo=new JButton("Undo");
     btnDeck=new JButton("Deck");
+    cbTimed=new JCheckBox("Timed");
+    cbTimed.setForeground(Color.decode("#FFFFFF"));
+    cbTimed.addActionListener(e->statusPane.setVisible(cbTimed.isSelected()));
+    cbTimed.setSelected(true);
     btnPane.add(btnDeal);
     btnPane.add(btnUndo);
     btnPane.add(btnDeck);
+    btnPane.add(cbTimed);
     for(int i=0;i<btnPane.getComponentCount();i++)
-      ((javax.swing.JButton)btnPane.getComponent(i)).putClientProperty("JComponent.sizeVariant","small");
+      ((javax.swing.JComponent)btnPane.getComponent(i)).putClientProperty("JComponent.sizeVariant","small");
     contentPane.add(btnPane);
   }
 
@@ -231,6 +239,10 @@ public class GameView extends JFrame {
     btnUndo.setEnabled(!state);
   }
 
+  public void enableTimedOption(boolean b) {
+    cbTimed.setEnabled(b);
+  }
+
   public void addDestroyListener(WindowListener l) {
     addWindowListener(l);
   }
@@ -265,6 +277,10 @@ public class GameView extends JFrame {
 
   public List<Rectangle2D.Double> getItems(int index) {
     return arealist.get(index).getCardList();
+  }
+
+  public boolean isTimedGame() {
+    return cbTimed.isSelected();
   }
 
   private void applyKeyStroke(javax.swing.AbstractAction a,String s,String d) {
