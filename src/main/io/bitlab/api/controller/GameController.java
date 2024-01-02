@@ -57,7 +57,9 @@ public class GameController {
             if(!inAction) {
               inAction=true;
               played++;
-              t=startTimer();
+              gv.enableTimedOption(false);
+              if(gv.isTimedGame())
+                t=startTimer();
             }
             showGameState();
           }
@@ -71,8 +73,10 @@ public class GameController {
               GameView.pick=false;
               if(!inAction) {
                 inAction=true;
-                t=startTimer();
                 played++;
+                gv.enableTimedOption(false);
+                if(gv.isTimedGame())
+                  t=startTimer();
               }
             } else if(from>0&&from<8) {
               for(Rectangle2D.Double r:cards) {
@@ -95,7 +99,9 @@ public class GameController {
             if(!inAction) {
               inAction=true;
               played++;
-              t=startTimer();
+              gv.enableTimedOption(false);
+              if(gv.isTimedGame())
+                t=startTimer();
             }
             showGameState();
           }
@@ -152,11 +158,14 @@ public class GameController {
       ge.newGame();
       showGameState();
       inAction=false;
-      t.cancel();
-      t.purge();
+      if(gv.isTimedGame()) {
+        t.cancel();
+        t.purge();
+      }
       gv.updateTime(0);
       gv.updateScore(0);
       gv.updateBonus(-1);
+      gv.enableTimedOption(true);
     }
   }
 
@@ -196,7 +205,9 @@ public class GameController {
     gv.updateScore(ge.getScore());
     if(ge.isWinner()) {
       gv.enableUndoButton(true);
-      t.cancel();t.purge();
+      if(gv.isTimedGame()) {
+        t.cancel();t.purge();
+      }
       deckChanged=false;
       inAction=false;
       won++;
@@ -207,6 +218,7 @@ public class GameController {
         gv.updateTime(0);
         gv.updateScore(0);
         gv.updateBonus(-1);
+        gv.enableTimedOption(true);
       }
     }
   }
