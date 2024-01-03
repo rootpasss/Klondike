@@ -26,7 +26,7 @@ public class RecordStore {
       data=(int[])ois.readObject();
     } catch(FileNotFoundException e) {
       new File(FILE_PATH).mkdir();
-      data=new int[]{0,0,0};
+      data=new int[]{0,0,0,0};
     } catch(Exception e) {
       e.printStackTrace();
     }
