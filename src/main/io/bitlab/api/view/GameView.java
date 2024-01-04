@@ -101,7 +101,7 @@ public class GameView extends JFrame {
     statusPane.add(lblBonus,c);c.gridx=1;
     statusPane.add(lblScore,c);c.gridx=2;c.weightx=0;
     statusPane.add(lblTime,c);
-    statusPane.setVisible(cbTimed.isSelected());
+    //statusPane.setVisible(cbTimed.isSelected());
     contentPane.add(statusPane);
   }
 
@@ -115,7 +115,7 @@ public class GameView extends JFrame {
     cbTimed=new JCheckBox("Timed");
     cbTimed.setForeground(Color.decode("#FFFFFF"));
     cbTimed.addActionListener(e->statusPane.setVisible(cbTimed.isSelected()));
-    cbTimed.setSelected(true);
+    //cbTimed.setSelected(true);
     btnPane.add(btnDeal);
     btnPane.add(btnUndo);
     btnPane.add(btnDeck);
@@ -241,6 +241,11 @@ public class GameView extends JFrame {
 
   public void enableTimedOption(boolean b) {
     cbTimed.setEnabled(b);
+  }
+
+  public void setTimedOption(boolean b) {
+    cbTimed.setSelected(b);
+    statusPane.setVisible(b);
   }
 
   public void addDestroyListener(WindowListener l) {
