@@ -44,6 +44,7 @@ public class GameController {
     deckIndex=RecordStore.getRecord()[0];
     played=RecordStore.getRecord()[1];
     won=RecordStore.getRecord()[2];
+    gv.setTimedOption(rs.getRecord()[3]==1);
     gv.addClickListener(new MouseAdapter() {
       @Override
       public void mouseClicked(MouseEvent evt) {
@@ -185,6 +186,7 @@ public class GameController {
     data[0]=deckIndex;
     data[1]=played;
     data[2]=won;
+    data[3]=gv.isTimedGame()?1:0;
     rs.setRecord(data);
   }
 
