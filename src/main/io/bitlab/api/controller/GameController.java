@@ -11,6 +11,8 @@ import java.awt.geom.Rectangle2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import java.time.LocalDate;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -22,6 +24,7 @@ import io.bitlab.api.model.GameEngine;
 import io.bitlab.api.model.RecordStore;
 import io.bitlab.api.view.DeckArt;
 import io.bitlab.api.view.GameView;
+import io.bitlab.api.view.Stat;
 
 public class GameController {
   private GameEngine ge;
@@ -36,6 +39,7 @@ public class GameController {
   private boolean deckChanged=false;
   private boolean timed=true;
   private Timer t;
+  private LocalDate date;
 
   public GameController(GameView gv,GameEngine ge,DeckArt da) {
     this.gv=gv;
@@ -44,6 +48,7 @@ public class GameController {
     deckIndex=RecordStore.getRecord()[0];
     played=RecordStore.getRecord()[1];
     won=RecordStore.getRecord()[2];
+    date=LocalDate.now();
     gv.setTimedOption(rs.getRecord()[3]==1);
     gv.addClickListener(new MouseAdapter() {
       @Override
@@ -214,13 +219,24 @@ public class GameController {
       inAction=false;
       won++;
       storeData();
-      if(JOptionPane.showConfirmDialog(gv,"Deal Again?","Solitaire",JOptionPane.YES_NO_OPTION)==0) {
+
+      int b=700000/time;
+      int s=b+ge.getScore();
+      int h=(int)getBest(0);
+      String d=(String)getBest(1);
+      Object[]da={ge.getScore(),time,b,ge.getScore()+b,h,d,played,won,won*100/played};
+      Object[]o={"Exit","Play Again"};
+      int opt=JOptionPane.showOptionDialog(gv,Stat.getPanel(da),"Game Won",JOptionPane.DEFAULT_OPTION,
+          JOptionPane.PLAIN_MESSAGE,null,o,o[1]);
+      if(opt==1) {
         ge.newGame();
         gv.updateUI(ge.getStacks());
         gv.updateTime(0);
         gv.updateScore(0);
         gv.updateBonus(-1);
         gv.enableTimedOption(true);
+      } else {
+        System.exit(0);
       }
     }
   }
@@ -233,7 +249,7 @@ public class GameController {
     data[2]=won;
 
     if(timed) {
-      java.time.LocalDate date=java.time.LocalDate.now();
+      //java.time.LocalDate date=java.time.LocalDate.now();
       int b=700000/time;
       int s=b+ge.getScore();
       int y=date.getYear();
@@ -257,6 +273,21 @@ public class GameController {
 
   private void setLocalTiming(int time) {
     this.time=time;
+  }
+
+  private Object getBest(int index) {
+    rs.openRecordStore();
+    int[]data=rs.getRecord();
+    Object[]val=new Object[2];
+    int top=0;
+    for(int i=4;i<data.length;i+=7) {
+      if(data[i+3]>top) {
+        top=data[i+3];
+        val[0]=data[i+3];
+        val[1]=new String(data[i+6]+"/"+data[i+5]+"/"+data[i+4]);
+      }
+    }
+    return val[index];
   }
 
   private Timer startTimer() {
