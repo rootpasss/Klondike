@@ -249,7 +249,6 @@ public class GameController {
     data[2]=won;
 
     if(timed) {
-      //java.time.LocalDate date=java.time.LocalDate.now();
       int b=700000/time;
       int s=b+ge.getScore();
       int y=date.getYear();
