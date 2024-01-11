@@ -15,8 +15,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 public class RecordStore {
-  private static final String FILE_PATH=System.getProperty("user.home")+"/.klondike";
-  private static final String FILE_NAME="/rms_klondike";
+  private static final String FILE_PATH=System.getProperty("user.home")+"/.klondike/";
+  private static final String FILE_NAME="rms_klondike";
   private static final File _FILE=new File(FILE_PATH+FILE_NAME);
   private static int[] data=null;
 
@@ -26,7 +26,7 @@ public class RecordStore {
       data=(int[])ois.readObject();
     } catch(FileNotFoundException e) {
       new File(FILE_PATH).mkdir();
-      data=new int[]{0,0,0,0};
+      data=new int[]{0,0,0,0,0,0};
     } catch(Exception e) {
       e.printStackTrace();
     }
