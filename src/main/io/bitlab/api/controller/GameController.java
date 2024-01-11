@@ -32,7 +32,9 @@ public class GameController {
   private DeckArt da;
   private int deckIndex;
   private int played;
+  private int playT;
   private int won;
+  private int wonT;
   private int time;
   private RecordStore rs=RecordStore.openRecordStore();
   private boolean inAction=false;
@@ -48,8 +50,10 @@ public class GameController {
     deckIndex=RecordStore.getRecord()[0];
     played=RecordStore.getRecord()[1];
     won=RecordStore.getRecord()[2];
+    playT=RecordStore.getRecord()[3];
+    wonT=RecordStore.getRecord()[4];
     date=LocalDate.now();
-    gv.setTimedOption(rs.getRecord()[3]==1);
+    gv.setTimedOption(rs.getRecord()[5]==1);
     gv.addClickListener(new MouseAdapter() {
       @Override
       public void mouseClicked(MouseEvent evt) {
@@ -64,8 +68,10 @@ public class GameController {
               inAction=true;
               played++;
               gv.enableTimedOption(false);
-              if(gv.isTimedGame())
+              if(gv.isTimedGame()) {
                 t=startTimer();
+                playT++;
+              }
             }
             showGameState();
           }
@@ -81,8 +87,10 @@ public class GameController {
                 inAction=true;
                 played++;
                 gv.enableTimedOption(false);
-                if(gv.isTimedGame())
+                if(gv.isTimedGame()) {
                   t=startTimer();
+                  playT++;
+                }
               }
             } else if(from>0&&from<8) {
               for(Rectangle2D.Double r:cards) {
@@ -106,8 +114,10 @@ public class GameController {
               inAction=true;
               played++;
               gv.enableTimedOption(false);
-              if(gv.isTimedGame())
+              if(gv.isTimedGame()) {
                 t=startTimer();
+                playT++;
+              }
             }
             showGameState();
           }
@@ -160,6 +170,8 @@ public class GameController {
       data[0]=deckIndex;
       data[1]=played;
       data[2]=won;
+      data[3]=playT;
+      data[4]=wonT;
       rs.setRecord(data);
       ge.newGame();
       showGameState();
@@ -189,10 +201,18 @@ public class GameController {
     rs.openRecordStore();
     int[]data=rs.getRecord();
     data[0]=deckIndex;
-    data[1]=played;
+    /*data[1]=played;
     data[2]=won;
-    data[3]=gv.isTimedGame()?1:0;
-    rs.setRecord(data);
+    data[3]=playT;
+    data[4]=wonT;
+    data[5]=gv.isTimedGame()?1:0;
+    rs.setRecord(data);*/
+    int[]copy=new int[data.length+2];
+    int k=0;
+    for(int i=0;i<copy.length;i++) {
+      copy[i]=i==3||i==4?9:data[k++];
+    }
+    rs.setRecord(copy);
   }
 
   private void changeDeck() {
@@ -210,34 +230,40 @@ public class GameController {
     gv.updateUI(ge.getStacks());
     gv.enableUndoButton(ge.isEmptyStack());
     gv.updateScore(ge.getScore());
+    int opt;
     if(ge.isWinner()) {
       gv.enableUndoButton(true);
       if(gv.isTimedGame()) {
         t.cancel();t.purge();
+        wonT++;
+        storeData();
+        int b=700000/time;
+        int s=b+ge.getScore();
+        int h=(int)getBest(0);
+        String d=(String)getBest(1);
+        Object[]da={ge.getScore(),time,b,ge.getScore()+b,h,d,playT,wonT,wonT*100/playT};
+        Object[]o={"Exit","Play Again"};
+        opt=JOptionPane.showOptionDialog(gv,Stat.getPanel(da),"Game Won",JOptionPane.DEFAULT_OPTION,
+            JOptionPane.PLAIN_MESSAGE,null,o,o[1]);
+        if(opt==0)
+          System.exit(0);
+      } else {
+        won++;
+        storeData();
+        opt=JOptionPane.showConfirmDialog(gv,"Deal Again?","Game Won",JOptionPane.YES_NO_OPTION);
       }
-      deckChanged=false;
-      inAction=false;
-      won++;
-      storeData();
 
-      int b=700000/time;
-      int s=b+ge.getScore();
-      int h=(int)getBest(0);
-      String d=(String)getBest(1);
-      Object[]da={ge.getScore(),time,b,ge.getScore()+b,h,d,played,won,won*100/played};
-      Object[]o={"Exit","Play Again"};
-      int opt=JOptionPane.showOptionDialog(gv,Stat.getPanel(da),"Game Won",JOptionPane.DEFAULT_OPTION,
-          JOptionPane.PLAIN_MESSAGE,null,o,o[1]);
-      if(opt==1) {
+      if(gv.isTimedGame()&&opt==1||opt==0) {
         ge.newGame();
         gv.updateUI(ge.getStacks());
         gv.updateTime(0);
         gv.updateScore(0);
         gv.updateBonus(-1);
         gv.enableTimedOption(true);
-      } else {
-        System.exit(0);
       }
+
+      deckChanged=false;
+      inAction=false;
     }
   }
 
@@ -247,8 +273,11 @@ public class GameController {
     data[0]=deckIndex;
     data[1]=played;
     data[2]=won;
+    data[5]=gv.isTimedGame()?1:0;
 
     if(timed) {
+      data[3]=playT;
+      data[4]=wonT;
       int b=700000/time;
       int s=b+ge.getScore();
       int y=date.getYear();
@@ -279,7 +308,7 @@ public class GameController {
     int[]data=rs.getRecord();
     Object[]val=new Object[2];
     int top=0;
-    for(int i=4;i<data.length;i+=7) {
+    for(int i=6;i<data.length;i+=7) {
       if(data[i+3]>top) {
         top=data[i+3];
         val[0]=data[i+3];
