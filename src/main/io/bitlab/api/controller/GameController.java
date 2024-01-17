@@ -244,7 +244,7 @@ public class GameController {
         String d=(String)getBest(1);
         Object[]da={ge.getScore(),time,b,ge.getScore()+b,h,d,playT,wonT,wonT*100/playT};
         Object[]o={"Exit","Play Again"};
-        opt=JOptionPane.showOptionDialog(gv,Stat.getPanel(da),"Game Won",JOptionPane.DEFAULT_OPTION,
+        opt=JOptionPane.showOptionDialog(gv,Stat.getPane1(da),"Game Won",JOptionPane.DEFAULT_OPTION,
             JOptionPane.PLAIN_MESSAGE,null,o,o[1]);
         if(opt==0)
           System.exit(0);
