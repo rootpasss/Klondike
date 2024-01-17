@@ -20,21 +20,14 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class Stat {
-  private static JPanel contentPane;
-  private static JPanel centerPane;
-  private static JPanel scorePane;
-  private static JPanel statPane;
-  private static JLabel lbl;
-  private static JLabel lbl1;
+  public static JPanel getPane1(Object[]d) {
+    JPanel contentPane=new JPanel(new BorderLayout(0,15));
+    JPanel centerPane=new JPanel(new GridLayout(2,1));
 
-  public static JPanel getPanel(Object[]d) {
-    contentPane=new JPanel(new BorderLayout(0,15));
-    centerPane=new JPanel(new GridLayout(2,1));
-
-    lbl=new JLabel("Congratulations, you won the game!");
+    JLabel lbl=new JLabel("Congratulations, you won the game!");
     lbl.setHorizontalAlignment(JLabel.CENTER);
 
-    scorePane=new JPanel(new GridBagLayout());
+    JPanel scorePane=new JPanel(new GridBagLayout());
     scorePane.setPreferredSize(new java.awt.Dimension(350,90));
     GridBagConstraints c=new GridBagConstraints();
     c.anchor=GridBagConstraints.LINE_START;
@@ -49,7 +42,7 @@ public class Stat {
     c.gridy++;
     scorePane.add(new JLabel("Total Score: "+d[3]),c);
 
-    statPane=new JPanel(new GridBagLayout());
+    JPanel statPane=new JPanel(new GridBagLayout());
     c.gridy=0;
     statPane.add(new JLabel("High score: "+d[4]),c);
     statPane.add(new JLabel("Date: "+d[5]),c);
