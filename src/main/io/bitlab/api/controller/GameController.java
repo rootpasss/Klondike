@@ -13,6 +13,7 @@ import java.awt.event.MouseEvent;
 
 import java.time.LocalDate;
 
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -36,6 +37,15 @@ public class GameController {
   private int won;
   private int wonT;
   private int time;
+  private int idx;
+  private int ws;
+  private int ls;
+  private int wsT;
+  private int lsT;
+  private int wsC=0;
+  private int lsC=0;
+  private int wsCT=0;
+  private int lsCT=0;
   private RecordStore rs=RecordStore.openRecordStore();
   private boolean inAction=false;
   private boolean deckChanged=false;
@@ -52,8 +62,12 @@ public class GameController {
     won=RecordStore.getRecord()[2];
     playT=RecordStore.getRecord()[3];
     wonT=RecordStore.getRecord()[4];
+    ws=RecordStore.getRecord()[5];
+    ls=RecordStore.getRecord()[6];
+    wsT=RecordStore.getRecord()[7];
+    lsT=RecordStore.getRecord()[8];
     date=LocalDate.now();
-    gv.setTimedOption(rs.getRecord()[5]==1);
+    gv.setTimedOption(rs.getRecord()[9]==1);
     gv.addClickListener(new MouseAdapter() {
       @Override
       public void mouseClicked(MouseEvent evt) {
@@ -154,13 +168,45 @@ public class GameController {
     gv.addStatsListener(new javax.swing.AbstractAction() {
       @Override
       public void actionPerformed(java.awt.event.ActionEvent evt) {
-        String stats="<html><h2><b>Games Played: "+played+"</b></h2><h2><b>Games Won: "+
+        /*String stats="<html><h2><b>Games Played: "+played+"</b></h2><h2><b>Games Won: "+
                      won+"</b></h2></p></html>";
-        JOptionPane.showMessageDialog(gv,stats,"Solitaire Stats",JOptionPane.PLAIN_MESSAGE);
+        JOptionPane.showMessageDialog(gv,stats,"Solitaire Stats",JOptionPane.PLAIN_MESSAGE);*/
+        ArrayList<String>a=(ArrayList<String>)getBest();
+        int p=playT>0?wonT*100/playT:0;
+        wsT=wsCT>wsT?wsCT:wsT; lsT=lsCT>lsT?lsCT:lsT;
+        Object[]d={a,playT,wonT,p+"%",wsT,lsT,wsCT};
+        Object[]o={"Reset","Close"};
+        JOptionPane.showOptionDialog(gv,Stat.getPane2(d),"Solitaire Statistics",JOptionPane.DEFAULT_OPTION,
+                                     JOptionPane.PLAIN_MESSAGE,null,o,o[1]);
       }
     });
     da.addDeckDialogListener(e->changeDeck());
     showGameState();
+
+    Stat.addListListener(new javax.swing.event.ListSelectionListener() {
+      @Override
+      public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+        if(!evt.getValueIsAdjusting()) {
+          idx=((javax.swing.JList)evt.getSource()).getSelectedIndex();
+          int p;int w;int x;int y;int z;
+          if(idx==0) {
+            p=playT;w=wonT;
+            x=wsCT>wsT?wsCT:wsT;
+            y=lsCT>lsT?lsCT:lsT;
+            z=wsCT;
+          } else {
+            p=played;w=won;
+            x=wsC>ws?wsC:ws;
+            y=lsC>ls?lsC:ls;
+            z=wsC;
+          }
+          Stat.hide();
+          int pp=p>0?w*100/p:0;
+          Object[]d={p,w,pp+"%",x,y,z};
+          Stat.updatePane(d);
+        }
+      }
+    });
   }
 
   private void createNewGame() {
@@ -172,6 +218,19 @@ public class GameController {
       data[2]=won;
       data[3]=playT;
       data[4]=wonT;
+      if(gv.isTimedGame()) {
+        lsCT++;
+        data[5]=ws;
+        data[6]=ls;
+        data[7]=wsCT>wsT?wsCT:wsT;
+        data[8]=lsCT>lsT?lsCT:lsT;
+      } else {
+        lsC++;
+        data[5]=wsC>ws?wsC:ws;
+        data[6]=lsC>ls?lsC:ls;
+        data[7]=wsT;
+        data[8]=lsT;
+      }
       rs.setRecord(data);
       ge.newGame();
       showGameState();
@@ -201,18 +260,23 @@ public class GameController {
     rs.openRecordStore();
     int[]data=rs.getRecord();
     data[0]=deckIndex;
-    /*data[1]=played;
+    data[1]=played;
     data[2]=won;
     data[3]=playT;
     data[4]=wonT;
-    data[5]=gv.isTimedGame()?1:0;
-    rs.setRecord(data);*/
-    int[]copy=new int[data.length+2];
-    int k=0;
-    for(int i=0;i<copy.length;i++) {
-      copy[i]=i==3||i==4?9:data[k++];
+    if(gv.isTimedGame()) {
+      data[5]=ws;
+      data[6]=ls;
+      data[7]=wsCT>wsT?wsCT:wsT;
+      data[8]=lsCT>lsT?lsCT:lsT;
+    } else {
+      data[5]=wsC>ws?wsC:ws;
+      data[6]=lsC>ls?lsC:ls;
+      data[7]=wsT;
+      data[8]=lsT;
     }
-    rs.setRecord(copy);
+    data[9]=gv.isTimedGame()?1:0;
+    rs.setRecord(data);
   }
 
   private void changeDeck() {
@@ -233,10 +297,11 @@ public class GameController {
     int opt;
     if(ge.isWinner()) {
       gv.enableUndoButton(true);
-      won++;
+      lsC=0;
       if(gv.isTimedGame()) {
         t.cancel();t.purge();
         wonT++;
+        wsCT++;
         storeData();
         int b=700000/time;
         int s=b+ge.getScore();
@@ -249,6 +314,8 @@ public class GameController {
         if(opt==0)
           System.exit(0);
       } else {
+        won++;
+        wsC++;
         storeData();
         opt=JOptionPane.showConfirmDialog(gv,"Deal Again?","Game Won",JOptionPane.YES_NO_OPTION);
       }
@@ -273,7 +340,18 @@ public class GameController {
     data[0]=deckIndex;
     data[1]=played;
     data[2]=won;
-    data[5]=gv.isTimedGame()?1:0;
+    if(timed) {
+      data[5]=ws;
+      data[6]=ls;
+      data[7]=wsCT>wsT?wsCT:wsT;
+      data[8]=lsCT>lsT?lsCT:lsT;
+    } else {
+      data[5]=wsC>ws?wsC:ws;
+      data[6]=lsC>ls?lsC:ls;
+      data[7]=wsT;
+      data[8]=lsT;
+    }
+    data[9]=gv.isTimedGame()?1:0;
 
     if(timed) {
       data[3]=playT;
@@ -308,7 +386,7 @@ public class GameController {
     int[]data=rs.getRecord();
     Object[]val=new Object[2];
     int top=0;
-    for(int i=6;i<data.length;i+=7) {
+    for(int i=10;i<data.length;i+=7) {
       if(data[i+3]>top) {
         top=data[i+3];
         val[0]=data[i+3];
@@ -316,6 +394,25 @@ public class GameController {
       }
     }
     return val[index];
+  }
+
+  private ArrayList<String> getBest() {
+    rs.openRecordStore();
+    int[]data=rs.getRecord();
+    if(data.length>10) {
+      java.util.Map<Integer,String>m=new java.util.HashMap<>();
+      for(int i=10;i<data.length;i+=7) {
+        m.put(data[i+3],data[i+6]+"/"+data[i+5]+"/"+data[i+4]);
+      }
+
+      ArrayList<String>d=new ArrayList<>();
+      m.entrySet().stream()
+       .sorted(java.util.Map.Entry.<Integer,String>comparingByKey().reversed()).limit(5)
+       .forEach(entry->d.add(entry.getKey()+" "+entry.getValue()));
+      return d;
+    } else {
+      return new ArrayList<String>(java.util.Arrays.asList(new String[]{"","","","",""}));
+    }
   }
 
   private Timer startTimer() {
