@@ -399,10 +399,11 @@ public class GameController {
   private ArrayList<String> getBest() {
     rs.openRecordStore();
     int[]data=rs.getRecord();
+    java.text.DecimalFormat df=new java.text.DecimalFormat("00");
     if(data.length>10) {
       java.util.Map<Integer,String>m=new java.util.HashMap<>();
       for(int i=10;i<data.length;i+=7) {
-        m.put(data[i+3],data[i+6]+"/"+data[i+5]+"/"+data[i+4]);
+        m.put(data[i+3],df.format(data[i+6])+"/"+df.format(data[i+5])+"/"+data[i+4]);
       }
 
       ArrayList<String>d=new ArrayList<>();
