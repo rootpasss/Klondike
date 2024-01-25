@@ -168,9 +168,6 @@ public class GameController {
     gv.addStatsListener(new javax.swing.AbstractAction() {
       @Override
       public void actionPerformed(java.awt.event.ActionEvent evt) {
-        /*String stats="<html><h2><b>Games Played: "+played+"</b></h2><h2><b>Games Won: "+
-                     won+"</b></h2></p></html>";
-        JOptionPane.showMessageDialog(gv,stats,"Solitaire Stats",JOptionPane.PLAIN_MESSAGE);*/
         ArrayList<String>a=(ArrayList<String>)getBest();
         int p=playT>0?wonT*100/playT:0;
         wsT=wsCT>wsT?wsCT:wsT; lsT=lsCT>lsT?lsCT:lsT;
