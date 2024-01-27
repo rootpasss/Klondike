@@ -173,8 +173,10 @@ public class GameController {
         wsT=wsCT>wsT?wsCT:wsT; lsT=lsCT>lsT?lsCT:lsT;
         Object[]d={a,playT,wonT,p+"%",wsT,lsT,wsCT};
         Object[]o={"Reset","Close"};
-        JOptionPane.showOptionDialog(gv,Stat.getPane2(d),"Solitaire Statistics",JOptionPane.DEFAULT_OPTION,
-                                     JOptionPane.PLAIN_MESSAGE,null,o,o[1]);
+        int opt=JOptionPane.showOptionDialog(gv,Stat.getPane2(d),"Solitaire Statistics",
+                                          JOptionPane.DEFAULT_OPTION,JOptionPane.PLAIN_MESSAGE,null,o,o[1]);
+        if(opt==0)
+          reset();
       }
     });
     da.addDeckDialogListener(e->changeDeck());
@@ -274,6 +276,20 @@ public class GameController {
     }
     data[9]=gv.isTimedGame()?1:0;
     rs.setRecord(data);
+  }
+
+  private void reset() {
+    if(idx==0) {
+      rs.openRecordStore();
+      int[]r=rs.getRecord();
+      int[]c=new int[10];
+      for(int i=0;i<c.length;i++)
+        c[i]=r[i];
+      rs.setRecord(c);
+      playT=0;wonT=0;wsT=0;wsCT=0;lsT=0;lsCT=0;
+    } else {
+      played=0;won=0;ws=0;wsC=0;ls=0;lsC=0;
+    }
   }
 
   private void changeDeck() {
