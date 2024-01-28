@@ -49,9 +49,10 @@ public class GameController {
   private RecordStore rs=RecordStore.openRecordStore();
   private boolean inAction=false;
   private boolean deckChanged=false;
-  private boolean timed=true;
+  //private boolean timed=true;
   private Timer t;
   private LocalDate date;
+  private int[] data;
 
   public GameController(GameView gv,GameEngine ge,DeckArt da) {
     this.gv=gv;
@@ -210,34 +211,16 @@ public class GameController {
 
   private void createNewGame() {
     if(JOptionPane.showConfirmDialog(gv,"Deal New?","Solitaire",JOptionPane.YES_NO_OPTION)==0) {
-      rs.openRecordStore();
-      int[]data=rs.getRecord();
-      data[0]=deckIndex;
-      data[1]=played;
-      data[2]=won;
-      data[3]=playT;
-      data[4]=wonT;
       if(gv.isTimedGame()) {
+        t.cancel();t.purge();
         lsCT++;
-        data[5]=ws;
-        data[6]=ls;
-        data[7]=wsCT>wsT?wsCT:wsT;
-        data[8]=lsCT>lsT?lsCT:lsT;
       } else {
         lsC++;
-        data[5]=wsC>ws?wsC:ws;
-        data[6]=lsC>ls?lsC:ls;
-        data[7]=wsT;
-        data[8]=lsT;
       }
-      rs.setRecord(data);
+      storeData();
       ge.newGame();
       showGameState();
       inAction=false;
-      if(gv.isTimedGame()) {
-        t.cancel();
-        t.purge();
-      }
       gv.updateTime(0);
       gv.updateScore(0);
       gv.updateBonus(-1);
@@ -256,40 +239,23 @@ public class GameController {
   }
 
   private void destroy() {
-    rs.openRecordStore();
-    int[]data=rs.getRecord();
-    data[0]=deckIndex;
-    data[1]=played;
-    data[2]=won;
-    data[3]=playT;
-    data[4]=wonT;
-    if(gv.isTimedGame()) {
-      data[5]=ws;
-      data[6]=ls;
-      data[7]=wsCT>wsT?wsCT:wsT;
-      data[8]=lsCT>lsT?lsCT:lsT;
-    } else {
-      data[5]=wsC>ws?wsC:ws;
-      data[6]=lsC>ls?lsC:ls;
-      data[7]=wsT;
-      data[8]=lsT;
+    if(inAction) {
+      if(gv.isTimedGame())
+        lsCT++;
+      else
+        lsC++;
     }
-    data[9]=gv.isTimedGame()?1:0;
-    rs.setRecord(data);
+    storeData();
   }
 
   private void reset() {
     if(idx==0) {
-      rs.openRecordStore();
-      int[]r=rs.getRecord();
-      int[]c=new int[10];
-      for(int i=0;i<c.length;i++)
-        c[i]=r[i];
-      rs.setRecord(c);
       playT=0;wonT=0;wsT=0;wsCT=0;lsT=0;lsCT=0;
+      data=java.util.Arrays.copyOf(data,10);
     } else {
       played=0;won=0;ws=0;wsC=0;ls=0;lsC=0;
     }
+    storeData();
   }
 
   private void changeDeck() {
@@ -348,27 +314,18 @@ public class GameController {
   }
 
   private void storeData() {
-    rs.openRecordStore();
-    int[]data=rs.getRecord();
     data[0]=deckIndex;
     data[1]=played;
     data[2]=won;
-    if(timed) {
-      data[5]=ws;
-      data[6]=ls;
-      data[7]=wsCT>wsT?wsCT:wsT;
-      data[8]=lsCT>lsT?lsCT:lsT;
-    } else {
-      data[5]=wsC>ws?wsC:ws;
-      data[6]=lsC>ls?lsC:ls;
-      data[7]=wsT;
-      data[8]=lsT;
-    }
+    data[3]=playT;
+    data[4]=wonT;
+    data[5]=wsC>ws?wsC:ws;
+    data[6]=lsC>ls?lsC:ls;
+    data[7]=wsCT>wsT?wsCT:wsT;
+    data[8]=lsCT>lsT?lsCT:lsT;
     data[9]=gv.isTimedGame()?1:0;
 
-    if(timed) {
-      data[3]=playT;
-      data[4]=wonT;
+    if(gv.isTimedGame()&&ge.isWinner()) {
       int b=700000/time;
       int s=b+ge.getScore();
       int y=date.getYear();
