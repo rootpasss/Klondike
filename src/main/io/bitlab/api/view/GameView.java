@@ -97,6 +97,9 @@ public class GameView extends JFrame {
     lblBonus=new JLabel();
     lblScore=new JLabel("Score: 0");
     lblTime=new JLabel(" Time: 0  ");
+    lblBonus.setForeground(Color.decode("#000000"));
+    lblScore.setForeground(lblBonus.getForeground());
+    lblTime.setForeground(lblBonus.getForeground());
     lblScore.setHorizontalAlignment(JLabel.RIGHT);
     statusPane.add(lblBonus,c);c.gridx=1;
     statusPane.add(lblScore,c);c.gridx=2;c.weightx=0;
@@ -108,7 +111,7 @@ public class GameView extends JFrame {
   private void addButtons() {
     JPanel btnPane=new JPanel();
     btnPane.setOpaque(false);
-    btnPane.setBounds(getWidth()/2-180,getHeight()-80,370,50);
+    btnPane.setBounds(getWidth()/2-180,getHeight()-95,370,50);
     btnDeal=new JButton("Deal New");
     btnUndo=new JButton("Undo");
     btnDeck=new JButton("Deck");
