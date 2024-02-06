@@ -190,17 +190,15 @@ public class GameController {
       public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
         if(!evt.getValueIsAdjusting()) {
           idx=((javax.swing.JList)evt.getSource()).getSelectedIndex();
-          int p;int w;int x;int y;//int z;
+          int p;int w;int x;int y;
           if(idx==0) {
             p=playT;w=wonT;
             x=wsCT>wsT?wsCT:wsT;
             y=lsCT>lsT?lsCT:lsT;
-            //z=wsCT;
           } else {
             p=played;w=won;
             x=wsC>ws?wsC:ws;
             y=lsC>ls?lsC:ls;
-            //z=wsC;
           }
           Stat.hide();
           int pp=p>0?w*100/p:0;
