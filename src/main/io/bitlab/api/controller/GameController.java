@@ -31,6 +31,7 @@ public class GameController {
   private GameEngine ge;
   private GameView gv;
   private DeckArt da;
+  private RecordStore rs=RecordStore.openRecordStore();
   private int deckIndex;
   private int played;
   private int playT;
@@ -46,13 +47,14 @@ public class GameController {
   private int lsC=0;
   private int wsCT=0;
   private int lsCT=0;
-  private RecordStore rs=RecordStore.openRecordStore();
+  private int[] data;
   private boolean inAction=false;
   private boolean deckChanged=false;
   //private boolean timed=true;
   private Timer t;
   private LocalDate date;
-  private int[] data;
+  private String s0="0 losses";
+  private String s1="0 losses";
 
   public GameController(GameView gv,GameEngine ge,DeckArt da) {
     this.gv=gv;
@@ -172,7 +174,7 @@ public class GameController {
         ArrayList<String>a=(ArrayList<String>)getBest();
         int p=playT>0?wonT*100/playT:0;
         wsT=wsCT>wsT?wsCT:wsT; lsT=lsCT>lsT?lsCT:lsT;
-        Object[]d={a,playT,wonT,p+"%",wsT,lsT,wsCT};
+        Object[]d={a,playT,wonT,p+"%",wsT,lsT,s0};
         Object[]o={"Reset","Close"};
         int opt=JOptionPane.showOptionDialog(gv,Stat.getPane2(d),"Solitaire Statistics",
                                           JOptionPane.DEFAULT_OPTION,JOptionPane.PLAIN_MESSAGE,null,o,o[1]);
@@ -188,21 +190,21 @@ public class GameController {
       public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
         if(!evt.getValueIsAdjusting()) {
           idx=((javax.swing.JList)evt.getSource()).getSelectedIndex();
-          int p;int w;int x;int y;int z;
+          int p;int w;int x;int y;//int z;
           if(idx==0) {
             p=playT;w=wonT;
             x=wsCT>wsT?wsCT:wsT;
             y=lsCT>lsT?lsCT:lsT;
-            z=wsCT;
+            //z=wsCT;
           } else {
             p=played;w=won;
             x=wsC>ws?wsC:ws;
             y=lsC>ls?lsC:ls;
-            z=wsC;
+            //z=wsC;
           }
           Stat.hide();
           int pp=p>0?w*100/p:0;
-          Object[]d={p,w,pp+"%",x,y,z};
+          Object[]d={p,w,pp+"%",x,y,idx==0?s0:s1};
           Stat.updatePane(d);
         }
       }
@@ -213,9 +215,9 @@ public class GameController {
     if(JOptionPane.showConfirmDialog(gv,"Deal New?","Solitaire",JOptionPane.YES_NO_OPTION)==0) {
       if(gv.isTimedGame()) {
         t.cancel();t.purge();
-        lsCT++;
+        lsCT++;s0=lsCT+" losses";
       } else {
-        lsC++;
+        lsC++;s1=lsC+" losses";
       }
       storeData();
       ge.newGame();
@@ -281,6 +283,7 @@ public class GameController {
         t.cancel();t.purge();
         wonT++;
         wsCT++;
+        s0=wsCT+" wins";
         storeData();
         int b=700000/time;
         int s=b+ge.getScore();
@@ -295,6 +298,7 @@ public class GameController {
       } else {
         won++;
         wsC++;
+        s1=wsC+" wins";
         storeData();
         opt=JOptionPane.showConfirmDialog(gv,"Deal Again?","Game Won",JOptionPane.YES_NO_OPTION);
       }
