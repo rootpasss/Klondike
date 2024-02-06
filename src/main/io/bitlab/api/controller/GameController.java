@@ -60,15 +60,16 @@ public class GameController {
     this.gv=gv;
     this.ge=ge;
     this.da=da;
-    deckIndex=RecordStore.getRecord()[0];
-    played=RecordStore.getRecord()[1];
-    won=RecordStore.getRecord()[2];
-    playT=RecordStore.getRecord()[3];
-    wonT=RecordStore.getRecord()[4];
-    ws=RecordStore.getRecord()[5];
-    ls=RecordStore.getRecord()[6];
-    wsT=RecordStore.getRecord()[7];
-    lsT=RecordStore.getRecord()[8];
+    data=rs.getRecord();
+    deckIndex=rs.getRecord()[0];
+    played=rs.getRecord()[1];
+    won=rs.getRecord()[2];
+    playT=rs.getRecord()[3];
+    wonT=rs.getRecord()[4];
+    ws=rs.getRecord()[5];
+    ls=rs.getRecord()[6];
+    wsT=rs.getRecord()[7];
+    lsT=rs.getRecord()[8];
     date=LocalDate.now();
     gv.setTimedOption(rs.getRecord()[9]==1);
     gv.addClickListener(new MouseAdapter() {
@@ -83,11 +84,12 @@ public class GameController {
             ge.moveCardDoubleClick(from);
             if(!inAction) {
               inAction=true;
-              played++;
               gv.enableTimedOption(false);
               if(gv.isTimedGame()) {
                 t=startTimer();
                 playT++;
+              } else {
+                played++;
               }
             }
             showGameState();
@@ -102,11 +104,12 @@ public class GameController {
               GameView.pick=false;
               if(!inAction) {
                 inAction=true;
-                played++;
                 gv.enableTimedOption(false);
                 if(gv.isTimedGame()) {
                   t=startTimer();
                   playT++;
+                } else {
+                  played++;
                 }
               }
             } else if(from>0&&from<8) {
@@ -129,11 +132,12 @@ public class GameController {
             ge.moveCard(GameView.from,GameView.total,from);
             if(!inAction) {
               inAction=true;
-              played++;
               gv.enableTimedOption(false);
               if(gv.isTimedGame()) {
                 t=startTimer();
                 playT++;
+              } else {
+                played++;
               }
             }
             showGameState();
