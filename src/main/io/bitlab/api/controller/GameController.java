@@ -276,12 +276,13 @@ public class GameController {
     int opt;
     if(ge.isWinner()) {
       gv.enableUndoButton(true);
-      lsC=0;
       if(gv.isTimedGame()) {
         t.cancel();t.purge();
         wonT++;
         wsCT++;
         storeData();
+        lsT=lsCT>lsT?lsCT:lsT;
+        lsCT=0;
         int b=700000/time;
         int s=b+ge.getScore();
         int h=(int)getBest(0);
@@ -296,6 +297,8 @@ public class GameController {
         won++;
         wsC++;
         storeData();
+        ls=lsC>ls?lsC:ls;
+        lsC=0;
         opt=JOptionPane.showConfirmDialog(gv,"Deal Again?","Game Won",JOptionPane.YES_NO_OPTION);
       }
 
