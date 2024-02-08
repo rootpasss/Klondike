@@ -89,7 +89,7 @@ public class Stat {
     c1.insets=new Insets(0,-30,0,0);
 
     p1.setBorder(new CompoundBorder(new TitledBorder("High Scores"),new EmptyBorder(0,16,0,35)));
-    p1.setPreferredSize(new Dimension(230,100));
+    p1.setPreferredSize(new Dimension(230,120));
     p1.removeAll();
     java.util.ArrayList<String>v=(java.util.ArrayList<String>)d[0];
     for(int i=0;i<v.size();i++) {

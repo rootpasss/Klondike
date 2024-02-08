@@ -31,6 +31,7 @@ public class GameController {
   private GameEngine ge;
   private GameView gv;
   private DeckArt da;
+  private RecordStore rs=RecordStore.openRecordStore();
   private int deckIndex;
   private int played;
   private int playT;
@@ -46,27 +47,29 @@ public class GameController {
   private int lsC=0;
   private int wsCT=0;
   private int lsCT=0;
-  private RecordStore rs=RecordStore.openRecordStore();
+  private int[] data;
   private boolean inAction=false;
   private boolean deckChanged=false;
   //private boolean timed=true;
   private Timer t;
   private LocalDate date;
-  private int[] data;
+  private String s0="0 losses";
+  private String s1="0 losses";
 
   public GameController(GameView gv,GameEngine ge,DeckArt da) {
     this.gv=gv;
     this.ge=ge;
     this.da=da;
-    deckIndex=RecordStore.getRecord()[0];
-    played=RecordStore.getRecord()[1];
-    won=RecordStore.getRecord()[2];
-    playT=RecordStore.getRecord()[3];
-    wonT=RecordStore.getRecord()[4];
-    ws=RecordStore.getRecord()[5];
-    ls=RecordStore.getRecord()[6];
-    wsT=RecordStore.getRecord()[7];
-    lsT=RecordStore.getRecord()[8];
+    data=rs.getRecord();
+    deckIndex=rs.getRecord()[0];
+    played=rs.getRecord()[1];
+    won=rs.getRecord()[2];
+    playT=rs.getRecord()[3];
+    wonT=rs.getRecord()[4];
+    ws=rs.getRecord()[5];
+    ls=rs.getRecord()[6];
+    wsT=rs.getRecord()[7];
+    lsT=rs.getRecord()[8];
     date=LocalDate.now();
     gv.setTimedOption(rs.getRecord()[9]==1);
     gv.addClickListener(new MouseAdapter() {
@@ -81,11 +84,12 @@ public class GameController {
             ge.moveCardDoubleClick(from);
             if(!inAction) {
               inAction=true;
-              played++;
               gv.enableTimedOption(false);
               if(gv.isTimedGame()) {
                 t=startTimer();
                 playT++;
+              } else {
+                played++;
               }
             }
             showGameState();
@@ -100,11 +104,12 @@ public class GameController {
               GameView.pick=false;
               if(!inAction) {
                 inAction=true;
-                played++;
                 gv.enableTimedOption(false);
                 if(gv.isTimedGame()) {
                   t=startTimer();
                   playT++;
+                } else {
+                  played++;
                 }
               }
             } else if(from>0&&from<8) {
@@ -127,11 +132,12 @@ public class GameController {
             ge.moveCard(GameView.from,GameView.total,from);
             if(!inAction) {
               inAction=true;
-              played++;
               gv.enableTimedOption(false);
               if(gv.isTimedGame()) {
                 t=startTimer();
                 playT++;
+              } else {
+                played++;
               }
             }
             showGameState();
@@ -172,7 +178,7 @@ public class GameController {
         ArrayList<String>a=(ArrayList<String>)getBest();
         int p=playT>0?wonT*100/playT:0;
         wsT=wsCT>wsT?wsCT:wsT; lsT=lsCT>lsT?lsCT:lsT;
-        Object[]d={a,playT,wonT,p+"%",wsT,lsT,wsCT};
+        Object[]d={a,playT,wonT,p+"%",wsT,lsT,s0};
         Object[]o={"Reset","Close"};
         int opt=JOptionPane.showOptionDialog(gv,Stat.getPane2(d),"Solitaire Statistics",
                                           JOptionPane.DEFAULT_OPTION,JOptionPane.PLAIN_MESSAGE,null,o,o[1]);
@@ -188,21 +194,19 @@ public class GameController {
       public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
         if(!evt.getValueIsAdjusting()) {
           idx=((javax.swing.JList)evt.getSource()).getSelectedIndex();
-          int p;int w;int x;int y;int z;
+          int p;int w;int x;int y;
           if(idx==0) {
             p=playT;w=wonT;
             x=wsCT>wsT?wsCT:wsT;
             y=lsCT>lsT?lsCT:lsT;
-            z=wsCT;
           } else {
             p=played;w=won;
             x=wsC>ws?wsC:ws;
             y=lsC>ls?lsC:ls;
-            z=wsC;
           }
           Stat.hide();
           int pp=p>0?w*100/p:0;
-          Object[]d={p,w,pp+"%",x,y,z};
+          Object[]d={p,w,pp+"%",x,y,idx==0?s0:s1};
           Stat.updatePane(d);
         }
       }
@@ -213,9 +217,9 @@ public class GameController {
     if(JOptionPane.showConfirmDialog(gv,"Deal New?","Solitaire",JOptionPane.YES_NO_OPTION)==0) {
       if(gv.isTimedGame()) {
         t.cancel();t.purge();
-        lsCT++;
+        lsCT++;s0=lsCT+" losses";
       } else {
-        lsC++;
+        lsC++;s1=lsC+" losses";
       }
       storeData();
       ge.newGame();
@@ -280,6 +284,7 @@ public class GameController {
         t.cancel();t.purge();
         wonT++;
         wsCT++;
+        s0=wsCT+" wins";
         storeData();
         lsT=lsCT>lsT?lsCT:lsT;
         lsCT=0;
@@ -296,6 +301,7 @@ public class GameController {
       } else {
         won++;
         wsC++;
+        s1=wsC+" wins";
         storeData();
         ls=lsC>ls?lsC:ls;
         lsC=0;
