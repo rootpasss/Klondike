@@ -104,7 +104,6 @@ public class GameView extends JFrame {
     statusPane.add(lblBonus,c);c.gridx=1;
     statusPane.add(lblScore,c);c.gridx=2;c.weightx=0;
     statusPane.add(lblTime,c);
-    //statusPane.setVisible(cbTimed.isSelected());
     contentPane.add(statusPane);
   }
 
