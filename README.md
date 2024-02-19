@@ -17,5 +17,5 @@ that resulting .jar will be present in the `build` folder.
 
 Take a look...
 --------------
-![Snapshot3](https://github.com/rootpasss/klondike/blob/main/preview/img1.png)
-![Snapshot4](https://github.com/rootpasss/klondike/blob/main/preview/img2.png)
+![Snapshot1](https://github.com/rootpasss/klondike/blob/main/preview/img1.png)
+![Snapshot2](https://github.com/rootpasss/klondike/blob/main/preview/img2.png)
