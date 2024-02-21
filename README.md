@@ -19,3 +19,5 @@ Take a look...
 --------------
 ![Snapshot1](https://github.com/rootpasss/klondike/blob/dev/preview/img1.png)
 ![Snapshot2](https://github.com/rootpasss/klondike/blob/dev/preview/img2.png)
+![Snapshot3](https://github.com/rootpasss/klondike/blob/dev/preview/img3.png)
+![Snapshot4](https://github.com/rootpasss/klondike/blob/dev/preview/img4.png)
