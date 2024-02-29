@@ -15,6 +15,12 @@ The source code has been built and structured using Ant following the MVC design
 to recompile it, go to the root directory and just run `ant` to obtain the Jar file directly;
 that resulting .jar will be present in the `build` folder.
 
+> [!TIP]
+> Press <kbd>N</kbd> to start a new game.<br>
+> Press <kbd>U</kbd> to undo the last move.<br>
+> Press <kbd>D</kbd> to choose between deck styles.<br>
+> Press <kbd>S</kbd> to show game statistics.
+
 Take a look...
 --------------
 ![Snapshot1](https://github.com/rootpasss/klondike/blob/main/preview/img1.png)
