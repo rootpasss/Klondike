@@ -16,9 +16,9 @@ to recompile it, go to the root directory and just run `ant` to obtain the Jar f
 that resulting .jar will be present in the `build` folder.
 
 > [!TIP]
-> Press <kbd>N</kbd> to start a new game.
-> Press <kbd>U</kbd> to undo the last move.
-> Press <kbd>D</kbd> to choose between deck styles.
+> Press <kbd>N</kbd> to start a new game.<br>
+> Press <kbd>U</kbd> to undo the last move.<br>
+> Press <kbd>D</kbd> to choose between deck styles.<br>
 > Press <kbd>S</kbd> to show game statistics.
 
 Take a look...
