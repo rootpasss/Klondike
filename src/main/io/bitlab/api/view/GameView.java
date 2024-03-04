@@ -313,7 +313,6 @@ class Area extends JPanel {
       setBounds(x,y,71,320);
     else//foundations area
       setBounds(x,y,78,105);
-    //setBorder(new javax.swing.border.LineBorder(java.awt.Color.GRAY,1,false));
   }
 
   public List<Rectangle2D.Double> getCardList() {
