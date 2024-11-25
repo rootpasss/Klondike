@@ -115,15 +115,13 @@ public class GameView extends JFrame {
     btnUndo=new JButton("Undo");
     btnDeck=new JButton("Deck");
     cbTimed=new JCheckBox("Timed");
-    cbTimed.setForeground(Color.decode("#FFFFFF"));
+    cbTimed.setForeground(UIManager.getLookAndFeel().toString().contains("metal")?Color.DARK_GRAY:
+                          Color.decode("#FFFFFF"));
     cbTimed.addActionListener(e->statusPane.setVisible(cbTimed.isSelected()));
-    //cbTimed.setSelected(true);
     btnPane.add(btnDeal);
     btnPane.add(btnUndo);
     btnPane.add(btnDeck);
     btnPane.add(cbTimed);
-    for(int i=0;i<btnPane.getComponentCount();i++)
-      ((javax.swing.JComponent)btnPane.getComponent(i)).putClientProperty("JComponent.sizeVariant","small");
     contentPane.add(btnPane);
   }
 
