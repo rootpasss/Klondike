@@ -26,6 +26,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
 
 @SuppressWarnings("unchecked")
 public class Stat {
@@ -84,6 +85,8 @@ public class Stat {
     l.setPreferredSize(new Dimension(190,60));
     l.setSelectedIndex(0);
     l.setBorder(new LineBorder(Color.LIGHT_GRAY,1,false));
+    l.setSelectionForeground(UIManager.getLookAndFeel().toString().contains("gtk")?Color.decode("#FFFFFF"):
+        l.getSelectionForeground());
     contentPane.add(l,c);c.gridy++;
     c.insets=new Insets(0,7,0,0);
     c1.insets=new Insets(0,-30,0,0);
