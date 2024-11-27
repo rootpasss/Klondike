@@ -49,7 +49,6 @@ public class DeckArt extends JDialog implements ActionListener {
     setModalityType(ModalityType.APPLICATION_MODAL);
 
     contentPane=new JPanel(null);
-    //TODO: import KeyStroke instead of use the fully qualified name
     contentPane.getInputMap(contentPane.WHEN_IN_FOCUSED_WINDOW)
                .put(KeyStroke.getKeyStroke("ESCAPE"),"close");
     contentPane.getInputMap(contentPane.WHEN_IN_FOCUSED_WINDOW)
