@@ -13,6 +13,7 @@ import java.awt.event.MouseEvent;
 
 import java.time.LocalDate;
 
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -335,21 +336,21 @@ public class GameController {
     data[9]=gv.isTimedGame()?1:0;
 
     if(gv.isTimedGame()&&ge.isWinner()) {
-      int b=700000/time;
-      int s=b+ge.getScore();
-      int y=date.getYear();
-      int m=date.getMonthValue();
-      int d=date.getDayOfMonth();
-      int[]apnd=java.util.Arrays.copyOf(data,data.length+7);
+      int b=700000/time;                          // Calculate bonus score
+      int s=b+ge.getScore();                      // Sums played score + bonus score
+      int y=date.getYear();                       // Get current year
+      int m=date.getMonthValue();                 // Get current month
+      int d=date.getDayOfMonth();                 // Get current day of the month
+      int[]apnd=Arrays.copyOf(data,data.length+7);// Copy the data array to append 7 new data entries
       gv.updateBonus(b);
       gv.updateScore(s);
-      apnd[data.length]=ge.getScore();
-      apnd[data.length+1]=time;
-      apnd[data.length+2]=b;
-      apnd[data.length+3]=s;
-      apnd[data.length+4]=y;
-      apnd[data.length+5]=m;
-      apnd[data.length+6]=d;
+      apnd[data.length]=ge.getScore();            // Append raw score
+      apnd[data.length+1]=time;                   // Append played time
+      apnd[data.length+2]=b;                      // Append bonus score
+      apnd[data.length+3]=s;                      // Append score + bonus score
+      apnd[data.length+4]=y;                      // Append current year
+      apnd[data.length+5]=m;                      // Append current month
+      apnd[data.length+6]=d;                      // Append current day of month
       rs.setRecord(apnd);
     } else {
       rs.setRecord(data);
