@@ -61,17 +61,17 @@ public class GameController {
     this.ge=ge;
     this.da=da;
     data=rs.getRecord();
-    deckIndex=rs.getRecord()[0];
-    played=rs.getRecord()[1];
-    won=rs.getRecord()[2];
-    playT=rs.getRecord()[3];
-    wonT=rs.getRecord()[4];
-    ws=rs.getRecord()[5];
-    ls=rs.getRecord()[6];
-    wsT=rs.getRecord()[7];
-    lsT=rs.getRecord()[8];
+    deckIndex=data[0];            // Obtain the current deck art
+    played=data[1];               // Obtain the played games without the timer
+    won=data[2];                  // Obtain the won games without the timer
+    playT=data[3];                // Obtain the played games with the timer
+    wonT=data[4];                 // Obtain the won games with the timer
+    ws=data[5];                   // Obtain the winning streak without the timer
+    ls=data[6];                   // Obtain the losing streak without the timer
+    wsT=data[7];                  // Obtain the winning streak with the timer
+    lsT=data[8];                  // Obtain the losing streak with the timer
+    gv.setTimedOption(data[9]==1);// Obtain the timer on/off option (0=disabled 1=enabled)
     date=LocalDate.now();
-    gv.setTimedOption(rs.getRecord()[9]==1);
     gv.addClickListener(new MouseAdapter() {
       @Override
       public void mouseClicked(MouseEvent evt) {
