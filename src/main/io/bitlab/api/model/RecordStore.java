@@ -27,6 +27,10 @@ public class RecordStore {
     } catch(FileNotFoundException e) {
       new File(FILE_PATH).mkdir();
       data=new int[]{0,0,0,0,0,0,0,0,0,0};
+      /* What this array initializes:
+         deck art, non timed played games, non timed won games, timed played games, timed won games,
+         non timed winning streak, non timed losing streak, timed winning streak, timed losing streak,
+         time on/off option */
     } catch(Exception e) {
       e.printStackTrace();
     }
